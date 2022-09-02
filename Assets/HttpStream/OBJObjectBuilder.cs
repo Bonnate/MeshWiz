@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2019 Dummiesman
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -197,7 +197,7 @@ public class OBJObjectBuilder {
 		_loader = loader;
 	}
 
-	        public static Material CreateNullMaterial()
+	    public static Material CreateNullMaterial()
         {
             return new Material(Shader.Find("Universal Render Pipeline/Lit"));
         }

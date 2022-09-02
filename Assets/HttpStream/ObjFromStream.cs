@@ -7,6 +7,9 @@ using System.IO;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using SimpleFileBrowser;
+using System;
+using System.Text;
 
 //List 사용을 위해
 using System.Collections.Generic;
@@ -62,6 +65,7 @@ public class ObjFromStream : MonoBehaviour
     {
         mInstantiatedObj = new List<GameObject>();
 
+        //FileBrowser.ShowSaveDialog(null, null, FileBrowser.PickMode.Files);
         StartDownloadFile("baked_mesh");
     }
 
@@ -188,8 +192,17 @@ public class ObjFromStream : MonoBehaviour
             else
             {
                 var textStream = new MemoryStream(www.downloadHandler.data);
-
                 queueData.instantiatedObj = new OBJLoader().Load(textStream);
+                
+                
+                string str = Encoding.Default.GetString(www.downloadHandler.data);
+                Debug.Log(str);
+
+                string path = "Assets/Resources/"+objName+".obj";
+                StreamWriter writer = new StreamWriter(path, true);
+                writer.Write(str);
+                writer.Close();
+
                 queueData.instantiatedObj.name = objName;
             }
         }
