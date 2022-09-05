@@ -47,7 +47,6 @@ public class MainSceneController : Singleton<MainSceneController>
         mCurrentObject = obj;
 
         mCurrentObject.AddComponent<OBJExportManager>();
-        mCurrentObject.AddComponent<OBJExportManager>();
     }
 
     public void BTN_DownloadFromURL()

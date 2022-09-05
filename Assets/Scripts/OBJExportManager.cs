@@ -30,6 +30,7 @@ public class OBJExportManager : MonoBehaviour
 
         //다운로드 하기
         WebGLFileSaver.SaveFile(MeshToString(GetComponent<MeshFilter>()), "baked_mesh.obj");
+        MeshToFile(GetComponent<MeshFilter>(), "A", "B");
     }
 
     IEnumerator Upload()

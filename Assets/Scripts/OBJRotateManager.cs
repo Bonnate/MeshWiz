@@ -23,6 +23,7 @@ public class OBJRotateManager : MonoBehaviour
             {
                 Vector3 vertex = vertices[i];
                 newVertices[i] = rotation * vertex;
+                newVertices[i] -= transform.position;
             }
             mesh.vertices = newVertices;
             mesh.RecalculateNormals();
