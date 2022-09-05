@@ -27,13 +27,20 @@ public class MainSceneController : Singleton<MainSceneController>
         //현재 오브젝트가 등록되지 않으면 실행하지 않는다.
         if (mCurrentObject == null) { return; }
 
+        mMouseInput.x = Input.GetAxis("Mouse X");
+        mMouseInput.y = Input.GetAxis("Mouse Y");
+
+        //움직이기
+        if (Input.GetMouseButton(2))
+        {
+            mCurrentObject.transform.Translate(Camera.main.transform.right * mMouseInput.x * Time.deltaTime, Space.World);
+            mCurrentObject.transform.Translate(Camera.main.transform.up * mMouseInput.y * Time.deltaTime, Space.World);
+        }
+
         //회전시키기
         if (Input.GetMouseButton(0))
         {
-            mMouseInput.x = Input.GetAxis("Mouse X");
-            mMouseInput.y = Input.GetAxis("Mouse Y");
-
-            mCurrentObject.transform.Rotate(Vector3.up * -mMouseInput.x * Time.deltaTime * 500f, Space.World);
+            mCurrentObject.transform.Rotate(Camera.main.transform.up * -mMouseInput.x * Time.deltaTime * 500f, Space.World);
             mCurrentObject.transform.Rotate(Camera.main.transform.right * mMouseInput.y * Time.deltaTime * 500f, Space.World);
         }
     }
