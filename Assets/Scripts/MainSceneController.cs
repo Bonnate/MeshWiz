@@ -30,6 +30,13 @@ public class MainSceneController : Singleton<MainSceneController>
         mMouseInput.x = Input.GetAxis("Mouse X");
         mMouseInput.y = Input.GetAxis("Mouse Y");
 
+        //회전시키기
+        if (Input.GetMouseButton(0))
+        {
+            mCurrentObject.transform.Rotate(Camera.main.transform.up * -mMouseInput.x * Time.deltaTime * 500f, Space.World);
+            mCurrentObject.transform.Rotate(Camera.main.transform.right * mMouseInput.y * Time.deltaTime * 500f, Space.World);
+        }
+        
         //움직이기
         if (Input.GetMouseButton(2))
         {
@@ -37,12 +44,6 @@ public class MainSceneController : Singleton<MainSceneController>
             mCurrentObject.transform.Translate(Camera.main.transform.up * mMouseInput.y * Time.deltaTime, Space.World);
         }
 
-        //회전시키기
-        if (Input.GetMouseButton(0))
-        {
-            mCurrentObject.transform.Rotate(Camera.main.transform.up * -mMouseInput.x * Time.deltaTime * 500f, Space.World);
-            mCurrentObject.transform.Rotate(Camera.main.transform.right * mMouseInput.y * Time.deltaTime * 500f, Space.World);
-        }
     }
 
     /// <summary>
