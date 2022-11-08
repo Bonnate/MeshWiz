@@ -199,7 +199,7 @@ public class OBJObjectBuilder {
 
 	    public static Material CreateNullMaterial()
         {
-            return new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            return new Material(MainSceneController.Instance.SampleMaterial);
         }
 }
 }

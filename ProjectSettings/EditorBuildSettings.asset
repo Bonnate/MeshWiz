@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scripts/HttpStream/ObjFromStream.unity
     guid: 0f928d9ce1b64b94f9b3d349956f8cd3
+  - enabled: 1
+    path: Assets/Scene/OfflineScene.unity
+    guid: 3aa594e044d88974c8f6fdcb4062d4a9
   m_configObjects: {}

@@ -7,6 +7,7 @@ using System.Text;
 using System;
 using UnityEngine.Networking;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 public class OBJExportManager : MonoBehaviour
 {
@@ -32,6 +33,20 @@ public class OBJExportManager : MonoBehaviour
         WebGLFileSaver.SaveFile(MeshToString(GetComponent<MeshFilter>()), "baked_mesh.obj");
         MeshToFile(GetComponent<MeshFilter>(), "A", "B");
     }
+
+    public void ExportToLocal()
+    {
+        //MeshToFile(GetComponent<MeshFilter>(), "Resources", "B");
+
+        //업로드하기
+        //StartCoroutine(Upload());
+
+        //다운로드 하기
+        string str = MeshToString(GetComponent<MeshFilter>());
+        FileStream stream = new FileStream(FileBrowserRuntime.Instance.mCurrentPath + "_resized.obj", FileMode.OpenOrCreate);
+        stream.Write(System.Text.Encoding.UTF8.GetBytes(str));
+        stream.Close();
+    }    
 
     IEnumerator Upload()
     {

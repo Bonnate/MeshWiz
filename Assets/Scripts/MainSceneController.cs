@@ -5,6 +5,8 @@ using TMPro;
 
 public class MainSceneController : Singleton<MainSceneController>
 {
+    public Material SampleMaterial;
+
     //현재 활성화된 오브젝트
     private GameObject mCurrentObject = null;
 
@@ -44,6 +46,15 @@ public class MainSceneController : Singleton<MainSceneController>
             mCurrentObject.transform.Translate(Camera.main.transform.up * mMouseInput.y * Time.deltaTime, Space.World);
         }
 
+        if(Input.mouseScrollDelta.y > 0)
+        {
+            mCurrentObject.transform.localScale += Vector3.one * Time.deltaTime;
+        }
+
+        if(Input.mouseScrollDelta.y < 0)
+        {
+            mCurrentObject.transform.localScale -= Vector3.one * Time.deltaTime;
+        }
     }
 
     /// <summary>
@@ -64,6 +75,6 @@ public class MainSceneController : Singleton<MainSceneController>
 
     public void BTN_ExportToOBJ()
     {
-        mCurrentObject.GetComponent<OBJExportManager>().Export();
+        mCurrentObject.GetComponent<OBJExportManager>().ExportToLocal();
     }
 }
