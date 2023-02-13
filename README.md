@@ -1,5 +1,7 @@
 
 # Mesh Resizer 0.2v (23.02.13)
+
+
 A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** of the **.obj** file.
 ![enter image description here](https://drive.google.com/uc?export=view&id=1IYhnw9Sz-7lfkFfvnsVb4V-sbScF9gu0)
 
@@ -28,6 +30,11 @@ On the current page, download from the Code button to the compressed file format
 ㅤ
 
 ## How To Use?
+
+> Watch the example video below!!
+
+[![Video Label](https://img.youtube.com/vi/dsj9x4qgeqQ/0.jpg)](https://youtu.be/dsj9x4qgeqQ)
+
 
 1. Run the program.  
 2. Load the obj file you want to change from the top left button '**Open**'.
