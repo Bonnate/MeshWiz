@@ -49,6 +49,8 @@ Older Versions Achives are [\[Here\]](https://drive.google.com/drive/folders/125
 2. Load the obj file you want to change from the top left button '**Open**'.
 >  **Note:** If the size of the obj file (the size of the mesh) is too large or too small, a warning window appears. You can adjust it to a specific size in the input field.
 
+>  **Note:** Scene can be zoomed through the mouse wheel.
+
 ㅤ
 
 3. If necessary, you can adjust the size by specifying the size in cm in the input field.
