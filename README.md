@@ -1,4 +1,5 @@
 
+
 # Mesh Resizer 0.2v (23.02.13)
 
 
@@ -24,8 +25,16 @@ UV mapping and image mapping will remain the same, and the output file will be a
 ㅤ
 
 ## How to download
+Supports Windows and MacOS. Download from the Google Drive link below.
 
-On the current page, download from the Code button to the compressed file format via **Download Zip**, extract, and use the program.
+| Platform| Link |
+|--|--|
+| Windows| [\[Link\]](https://drive.google.com/file/d/1PCVvpivkXQaWI4raJApmqTSkvWHTTzWF/view?usp=sharing) |
+| MacOS| [\[Link\]](https://drive.google.com/file/d/1HpRLAF_PgbghBRa3Tdd-kLh-tfV2dxNn/view?usp=sharing) |
+
+Older Versions Achives are [\[Here\]](https://drive.google.com/drive/folders/1255flaD3pOOSMzXRwbupYDtUh8jRuuCM?usp=sharing)
+
+
 
 ㅤ
 
@@ -55,10 +64,13 @@ On the current page, download from the Code button to the compressed file format
 
 ## Application example
 > The large chair is set to appear 1 meter with the default scale of Vector.one (1,1,1) in Unity.
-![enter image description here](https://drive.google.com/uc?id=1uR2ZJV-Lq8RLUFLhmIawyBd21O0TGRza)
+![Application example](https://drive.google.com/uc?id=1uR2ZJV-Lq8RLUFLhmIawyBd21O0TGRza)
 
 > These changes are also fully implemented in 3ds Max.
-![enter image description here](https://drive.google.com/uc?id=1vz0LRepQJGgpjDebLMGo34-4gGf9dmtE)
+![These changes are also fully implemented in 3ds Max](https://drive.google.com/uc?id=1vz0LRepQJGgpjDebLMGo34-4gGf9dmtE)
+
+> The texture also works perfectly.
+![The texture also works perfectly](https://drive.google.com/uc?export=view&id=1pA4GnLoJ5HTSD_CHjUC0PApmGkhaTQVZ)
 
 ㅤ
 
