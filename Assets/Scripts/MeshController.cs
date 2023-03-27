@@ -70,11 +70,11 @@ public class MeshController : Singleton<MeshController>
 
         float currentObjectWidth = CheckCurrentObjSize();
 
-        if(currentObjectWidth > 5.0f)
+        if (currentObjectWidth > 5.0f)
         {
             DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "Object size is too large. \nIf necessary, adjust the size in the input field.", "OK");
         }
-        if(currentObjectWidth < 0.1f)
+        if (currentObjectWidth < 0.1f)
         {
             DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "Object size is too tiny. \nIf necessary, adjust the size in the input field.", "OK");
         }
@@ -109,7 +109,7 @@ public class MeshController : Singleton<MeshController>
     /// </summary>
     public void Export()
     {
-        if(mCurrentObject == null)
+        if (mCurrentObject == null)
         {
             DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "There are currently no objects loaded.", "OK");
             return;
@@ -122,14 +122,14 @@ public class MeshController : Singleton<MeshController>
     #region Button Events
     public void BTN_ResizeObj()
     {
-        if(mCurrentObject == null)
+        if (mCurrentObject == null)
         {
             DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "There are currently no objects loaded.", "OK");
             return;
         }
 
-        if(mResizeInputField.text.Length == 0) 
-        { 
+        if (mResizeInputField.text.Length == 0)
+        {
             DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "No input value.\nPlease check again.", "OK");
         }
 
@@ -138,5 +138,11 @@ public class MeshController : Singleton<MeshController>
 
         RotateSystemManager.Instance.SetAxisScale(CheckCurrentObjSize() * 5f);
     }
+
+    public void BTN_ResetRotation()
+    {
+        mCenterPivotTransform.eulerAngles = Vector3.zero;
+    }
+
     #endregion
 }

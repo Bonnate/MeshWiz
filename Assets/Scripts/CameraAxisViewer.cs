@@ -8,7 +8,8 @@ public class CameraAxisViewer : MonoBehaviour
     [SerializeField] private GameObject[] mViewTransforms;
     [SerializeField] private Image mCameraStateImage;
     
-    private Camera mMainCamera;
+    [SerializeField] Camera mMainCamera;
+    [SerializeField] Camera mAxisOverlayCamera;
 
     [SerializeField] private float mMinFOV;
     [SerializeField] private float mMaxFOV;
@@ -16,7 +17,6 @@ public class CameraAxisViewer : MonoBehaviour
 
     private void Start()
     {
-        mMainCamera = Camera.main;
         mCurrentFOV = mMainCamera.orthographicSize;
 
         BTN_ChangeViewPos(0);
@@ -36,7 +36,7 @@ public class CameraAxisViewer : MonoBehaviour
         mCurrentFOV = Mathf.Clamp(mCurrentFOV, mMinFOV, mMaxFOV);
 
         mMainCamera.orthographicSize = Mathf.Lerp(mMainCamera.orthographicSize, mCurrentFOV, Time.deltaTime * 5.0f);
-
+        mAxisOverlayCamera.orthographicSize = mMainCamera.orthographicSize;
     }
 
     public void BTN_ChangeViewPos(int val)
