@@ -1,19 +1,15 @@
 
 
-# Mesh Resizer 0.2v (23.02.13)
+# Mesh Resizer 0.3v (23.04.03)
 
 
 A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** of the **.obj** file.
-![enter image description here](https://drive.google.com/uc?export=view&id=1IYhnw9Sz-7lfkFfvnsVb4V-sbScF9gu0)
+![enter image description here](https://drive.google.com/uc?export=view&id=1zH1yMuTDMcmQsQm8aR7h8ZTx2VJPaZRb)
 
 ## Newly Updated!
 
- 1. Add Rotation Gizmo 
- 2. Worldspace, local space rotatable 
- 3. Add Dialog Box(for warning)
- 4. Changing the automatic name generation logic
- 5. Rotating relative to the center axis regardless of the pivot of the object file
- 6. Automatically resize using [cm]
+ 1. Added static grid
+ 2. Added a UI that allows you to see three axes simultaneously on the right side
 
   ㅤ
 
@@ -26,13 +22,8 @@ UV mapping and image mapping will remain the same, and the output file will be a
 
 ## How to download
 Supports Windows and MacOS. Download from the Google Drive link below.
-
-| Platform| Link |
-|--|--|
-| Windows| [\[Link\]](https://drive.google.com/file/d/1PCVvpivkXQaWI4raJApmqTSkvWHTTzWF/view?usp=sharing) |
-| MacOS| [\[Link\]](https://drive.google.com/file/d/1HpRLAF_PgbghBRa3Tdd-kLh-tfV2dxNn/view?usp=sharing) |
-
-Older Versions Achives are [\[Here\]](https://drive.google.com/drive/folders/1255flaD3pOOSMzXRwbupYDtUh8jRuuCM?usp=sharing)
+</br></br>
+Download Here: [\[Google Drive\]](https://drive.google.com/drive/folders/1255flaD3pOOSMzXRwbupYDtUh8jRuuCM?usp=sharing)
 
 
 
