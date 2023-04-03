@@ -7,9 +7,9 @@ public class CameraAxisViewer : MonoBehaviour
 {
     [SerializeField] private GameObject[] mViewTransforms;
     [SerializeField] private Image mCameraStateImage;
-    
+
     [SerializeField] Camera mMainCamera;
-    [SerializeField] Camera mAxisOverlayCamera;
+    [SerializeField] Camera[] mOverlayCameras;
 
     [SerializeField] private float mMinFOV;
     [SerializeField] private float mMaxFOV;
@@ -26,7 +26,7 @@ public class CameraAxisViewer : MonoBehaviour
     {
         UpdateCameraSize();
     }
-    
+
     private void UpdateCameraSize()
     {
         float wheelInput = Input.GetAxis("Mouse ScrollWheel");
@@ -36,7 +36,9 @@ public class CameraAxisViewer : MonoBehaviour
         mCurrentFOV = Mathf.Clamp(mCurrentFOV, mMinFOV, mMaxFOV);
 
         mMainCamera.orthographicSize = Mathf.Lerp(mMainCamera.orthographicSize, mCurrentFOV, Time.deltaTime * 5.0f);
-        mAxisOverlayCamera.orthographicSize = mMainCamera.orthographicSize;
+
+        foreach (Camera camera in mOverlayCameras)
+            camera.orthographicSize = mMainCamera.orthographicSize;
     }
 
     public void BTN_ChangeViewPos(int val)
@@ -44,8 +46,8 @@ public class CameraAxisViewer : MonoBehaviour
         Camera.main.transform.parent = mViewTransforms[val].transform;
         Camera.main.transform.localPosition = Vector3.zero;
         Camera.main.transform.localRotation = Quaternion.identity;
-        
-        switch(val)
+
+        switch (val)
         {
             case 0:
                 mCameraStateImage.color = Color.blue;
