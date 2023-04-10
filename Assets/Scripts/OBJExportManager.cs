@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 using System.Runtime.InteropServices;
 using System.Linq;
 
-public class OBJExportManager : MonoBehaviour
+public class OBJExportManager : Singleton<OBJExportManager>
 {
     struct ObjMaterial
     {
@@ -25,13 +25,14 @@ public class OBJExportManager : MonoBehaviour
     public void ExportToLocal()
     {
         //로컬에 다운로드
-        string str = MeshToString(GetComponent<MeshFilter>());
+        // string str = MeshToString(GetComponent<MeshFilter>());
+        string str = UtilityManager.MeshToObjString(GetComponent<MeshFilter>());
         FileStream stream = new FileStream(FileBrowserRuntime.Instance.mCurrentPath.Replace(".obj", "") + "_resized.obj", FileMode.OpenOrCreate);
         stream.Write(System.Text.Encoding.UTF8.GetBytes(str));
         stream.Close();
     }    
 
-    string MeshToString(MeshFilter mf, Dictionary<string, ObjMaterial> materialList)
+    private string MeshToString(MeshFilter mf, Dictionary<string, ObjMaterial> materialList)
     {
         Mesh m = mf.mesh;
         Material[] mats = mf.GetComponent<MeshRenderer>().materials;
@@ -45,7 +46,7 @@ public class OBJExportManager : MonoBehaviour
 
             //This is sort of ugly - inverting x-component since we're in
             //a different coordinate system than "everyone" is "used to".
-            sb.Append(string.Format("v {0} {1} {2}\n", -wv.x, wv.y, wv.z));
+            sb.Append(string.Format("v {0} {1} {2}\n", wv.x, wv.y, wv.z));
         }
         sb.Append("\n");
 
@@ -53,7 +54,7 @@ public class OBJExportManager : MonoBehaviour
         {
             Vector3 wv = mf.transform.TransformDirection(lv);
 
-            sb.Append(string.Format("vn {0} {1} {2}\n", -wv.x, wv.y, wv.z));
+            sb.Append(string.Format("vn {0} {1} {2}\n", wv.x, wv.y, wv.z));
         }
         sb.Append("\n");
 
@@ -123,43 +124,16 @@ public class OBJExportManager : MonoBehaviour
         return new Dictionary<string, ObjMaterial>();
     }
 
-    void MeshToFile(MeshFilter mf, string folder, string filename)
-    {
-        Dictionary<string, ObjMaterial> materialList = PrepareFileWrite();
-
-        using (StreamWriter sw = new StreamWriter(folder + "/" + filename + ".obj"))
-        {
-            sw.Write("mtllib ./" + filename + ".mtl\n");
-
-            sw.Write(MeshToString(mf, materialList));
-        }
-    }
-
-    private string MeshToString(MeshFilter mf)
+    public string MeshToString(MeshFilter mf)
     {
         Dictionary<string, ObjMaterial> materialList = PrepareFileWrite();
 
         StringBuilder str = new StringBuilder();
 
-        str.Append("mtllib ./" + "tempHere" + ".mtl\n");
+        // str.Append("mtllib ./" + "tempHere" + ".mtl\n");
         str.Append(MeshToString(mf, materialList));
 
         return str.ToString();
-    }
-
-    void MeshesToFile(MeshFilter[] mf, string folder, string filename)
-    {
-        Dictionary<string, ObjMaterial> materialList = PrepareFileWrite();
-
-        using (StreamWriter sw = new StreamWriter(folder + "/" + filename + ".obj"))
-        {
-            sw.Write("mtllib ./" + filename + ".mtl\n");
-
-            for (int i = 0; i < mf.Length; i++)
-            {
-                sw.Write(MeshToString(mf[i], materialList));
-            }
-        }
     }
 }
 

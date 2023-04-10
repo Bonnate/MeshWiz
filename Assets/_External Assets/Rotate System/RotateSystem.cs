@@ -11,7 +11,7 @@ public enum Axis
 
 public class RotateSystem : MonoBehaviour
 {
-    public static bool IsEnabled = false; //현재 어떠한 축이 사용중인가?
+    public static bool IsEnabled { private set; get; } = false; //현재 어떠한 축이 사용중인가?
 
     [SerializeField] private Axis mRotateAxis; //담당하는 회전 축
     [SerializeField] private bool mIsLocalRotation = false;
@@ -52,6 +52,8 @@ public class RotateSystem : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
+            RotateSystemManager.Instance.InputHandler(RotateSystemManager.START_ROTATE);
+
             mIsRotateEnabled = true;
             IsEnabled = true;
 

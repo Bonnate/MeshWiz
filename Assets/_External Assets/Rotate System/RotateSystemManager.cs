@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class RotateSystemManager : Singleton<RotateSystemManager>
 {
+    public const string START_ROTATE = "_START_ROTATE";
+    public const string UNDO_ROTATE = "_UNDO_ROTATE";
+
+    [SerializeField] private Transform mRootRotateAxis;
     [SerializeField] private GameObject[] mLocalRotateAxises;
     [SerializeField] private GameObject[] mWorldRotateAxises;
 
@@ -12,6 +16,8 @@ public class RotateSystemManager : Singleton<RotateSystemManager>
 
     private Camera mMainCamera;
     private Ray mCamRay;
+
+    private Stack<Vector3> mEulerRotHistoryStack = new Stack<Vector3>();
 
     private void Start()
     {
@@ -35,10 +41,39 @@ public class RotateSystemManager : Singleton<RotateSystemManager>
                 hit.transform.GetComponent<RotateSystem>().HitByRay();
             }
         }
+
+        if(RotateSystem.IsEnabled == false && Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z))
+            InputHandler(UNDO_ROTATE);
+
+    }
+
+    public void InputHandler(string message)
+    {
+        switch (message)
+        {
+            case START_ROTATE:
+                {
+                    mEulerRotHistoryStack.Push(mRootRotateAxis.eulerAngles);
+                    break;
+                }
+
+            case UNDO_ROTATE:
+                {
+                    if(mEulerRotHistoryStack.Count > 0)
+                    {
+                        Vector3 eulerAngles = mEulerRotHistoryStack.Pop();
+                        Debug.Log(eulerAngles);
+                        mRootRotateAxis.eulerAngles = eulerAngles;
+                    }
+                    break;
+                }
+        }
     }
 
     public void SetAxisScale(float scale)
     {
+        scale *= 5.0f;
+
         foreach (GameObject axisTransform in mLocalRotateAxises) { axisTransform.transform.localScale = Vector3.one * scale; }
         foreach (GameObject axisTransform in mWorldRotateAxises) { axisTransform.transform.localScale = Vector3.one * scale; }
     }

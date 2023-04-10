@@ -26,29 +26,10 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
 
             GameObject newObj = new OBJLoader().Load(new MemoryStream(bytes));
             newObj.SetActive(true);
+            newObj.transform.localScale = Vector3.one;
 
             //메시 컨트롤러에 로드한 obj를 등록
             MeshController.Instance.Load(newObj);
-        }
-    }
-
-    public void SaveItemSet(string text)
-    {
-        string initialPath = "C:\\Users\\[YourPath]";
-        string initialFilename = "SaveData_" + DateTime.Now.ToString(("MM_dd_HH_mm_ss")) + ".json";
-        FileBrowser.ShowSaveDialog(null, null, FileBrowser.PickMode.Files, false, initialPath, initialFilename, "Save As", "Save");
-
-        StartCoroutine(ShowSaveDialogCoroutine(text, initialPath, initialFilename));
-    }
-
-    IEnumerator ShowSaveDialogCoroutine(string text, string initialPath = null, string initialFilename = null)
-    {
-        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.FilesAndFolders, false, initialPath, initialFilename, "Save Files and Folders", "Save");
-
-        if (FileBrowser.Success)
-        {
-            string path = FileBrowser.Result[0];
-            File.WriteAllText(path, text);
         }
     }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DialogBox;
 
 public class MeshController : Singleton<MeshController>
 {
@@ -10,44 +11,27 @@ public class MeshController : Singleton<MeshController>
     [SerializeField] private TMP_InputField mResizeInputField;
 
     //현재 활성화된 오브젝트
-    private GameObject mCurrentObject = null;
-
-    //오브젝트 회전을 위한 마우스 입력
-    private Vector2 mMouseInput;
+    [SerializeField] public GameObject CurrentGo = null;
 
     /// <summary>
     /// 오브젝트의 크기를 설정
     /// </summary>
-    /// <param name="mCurrentObject.transform"></param>
+    /// <param name="CurrentGo.transform"></param>
     /// <param name="meter"></param>
     private void SetScale(float meter)
     {
-        Debug.LogFormat("Set Scale to {0} meter", meter);
+        Transform currentObjTransform = CurrentGo.transform;
 
-        bool isColliderExists = true;
+        float longestLength = UtilityManager.GetLongestVertexLengthWithScale(CurrentGo.GetComponent<MeshFilter>().sharedMesh, currentObjTransform, false);
 
-        BoxCollider collider = GetComponent<BoxCollider>();
-        if (collider == null)
-        {
-            isColliderExists = false;
-            collider = mCurrentObject.AddComponent<BoxCollider>();
-        }
+        float scaleDelta = longestLength;
+        currentObjTransform.localScale = currentObjTransform.localScale / scaleDelta * meter;
 
-        mCurrentObject.transform.transform.localScale = Vector3.one;
+        // 중앙으로 이동
+        UtilityManager.SetPositionViaCenter(CurrentGo.transform, Vector3.zero);
 
-        float maxBoxScale = Mathf.Max(collider.size.x, collider.size.y, collider.size.z);
-        float maxLocalScale = Mathf.Max(mCurrentObject.transform.localScale.x, mCurrentObject.transform.localScale.y, mCurrentObject.transform.localScale.z);
-
-        float currentScale = maxBoxScale * maxLocalScale;
-        mCurrentObject.transform.localScale = transform.localScale / currentScale * meter;
-
-        mCurrentObject.transform.transform.Translate(Vector3.forward * (mCurrentObject.transform.transform.localPosition.z - collider.center.z));
-
-        if (!isColliderExists)
-        {
-            Debug.Log("콜라이더 파괴");
-            Destroy(collider);
-        }
+        // 축 크기 설정
+        RotateSystemManager.Instance.SetAxisScale(UtilityManager.GetLongestVertexLengthWithScale(CurrentGo.GetComponent<MeshFilter>().sharedMesh, CurrentGo.transform, true));
     }
 
     #region Load / Export
@@ -57,51 +41,26 @@ public class MeshController : Singleton<MeshController>
     public void Load(GameObject obj)
     {
         mCenterPivotTransform.rotation = Quaternion.identity;
-        mCenterPivotTransform.localScale = Vector3.one;
 
-        Destroy(mCurrentObject);
+        Destroy(CurrentGo);
 
-        mCurrentObject = obj;
-        mCurrentObject.AddComponent<OBJExportManager>();
+        CurrentGo = obj;
+        CurrentGo.AddComponent<OBJExportManager>();
 
-        UtilityManager.SetPositionViaCenter(mCurrentObject.transform, Vector3.zero);
+        CurrentGo.transform.SetParent(mCenterPivotTransform);
+        mCenterPivotTransform.localScale = new Vector3(-1, 1, 1);
+        CurrentGo.transform.transform.localScale = Vector3.one;
 
-        mCurrentObject.transform.SetParent(mCenterPivotTransform);
+        // 중앙으로 이동
+        UtilityManager.SetPositionViaCenter(CurrentGo.transform, Vector3.zero);
 
-        float currentObjectWidth = CheckCurrentObjSize();
+        // 가장 긴 축 길이 획득
+        float longestLength = UtilityManager.GetLongestVertexLengthWithScale(CurrentGo.GetComponent<MeshFilter>().sharedMesh, CurrentGo.transform, true);
 
-        if (currentObjectWidth > 5.0f)
-        {
-            DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "Object size is too large. \nIf necessary, adjust the size in the input field.", "OK");
-        }
-        if (currentObjectWidth < 0.1f)
-        {
-            DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "Object size is too tiny. \nIf necessary, adjust the size in the input field.", "OK");
-        }
+        // 축 크기 설정
+        RotateSystemManager.Instance.SetAxisScale(longestLength);
 
-        RotateSystemManager.Instance.SetAxisScale(currentObjectWidth * 5f);
-    }
-
-    private float CheckCurrentObjSize()
-    {
-        bool isColliderExists = true;
-
-        BoxCollider collider = mCurrentObject.GetComponent<BoxCollider>();
-        if (collider == null)
-        {
-            isColliderExists = false;
-            collider = mCurrentObject.AddComponent<BoxCollider>();
-        }
-
-        var min = collider.center - collider.size * 0.5f;
-        var max = collider.center + collider.size * 0.5f;
-
-        var P000 = mCurrentObject.transform.TransformPoint(new Vector3(min.x, min.y, min.z));
-        var P111 = mCurrentObject.transform.TransformPoint(new Vector3(max.x, max.y, max.z));
-
-        if (!isColliderExists) { Destroy(collider); }
-
-        return (P000 - P111).magnitude;
+        mResizeInputField.text = (longestLength * 100f).ToString("F0");
     }
 
     /// <summary>
@@ -109,20 +68,20 @@ public class MeshController : Singleton<MeshController>
     /// </summary>
     public void Export()
     {
-        if (mCurrentObject == null)
+        if (CurrentGo == null)
         {
             DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "There are currently no objects loaded.", "OK");
             return;
         }
 
-        mCurrentObject.GetComponent<OBJExportManager>().ExportToLocal();
+        CurrentGo.GetComponent<OBJExportManager>().ExportToLocal();
     }
     #endregion
 
     #region Button Events
     public void BTN_ResizeObj()
     {
-        if (mCurrentObject == null)
+        if (CurrentGo == null)
         {
             DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "There are currently no objects loaded.", "OK");
             return;
@@ -131,12 +90,17 @@ public class MeshController : Singleton<MeshController>
         if (mResizeInputField.text.Length == 0)
         {
             DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "No input value.\nPlease check again.", "OK");
+            return;
         }
 
-        SetScale(float.Parse(mResizeInputField.text) * 0.01f);
-        UtilityManager.SetPositionViaCenter(mCurrentObject.transform, Vector3.zero);
+        if (int.Parse(mResizeInputField.text) == 0)
+        {
+            DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "Zero is not available.\nPlease check again.", "OK");
+            return;
+        }        
 
-        RotateSystemManager.Instance.SetAxisScale(CheckCurrentObjSize() * 5f);
+        // 크기 조정
+        SetScale(float.Parse(mResizeInputField.text) * 0.01f);
     }
 
     public void BTN_ResetRotation()
