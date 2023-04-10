@@ -1,6 +1,6 @@
 
 
-# Mesh Resizer 0.3v (23.04.03)
+# Mesh Resizer 0.4v (23.04.10)
 
 
 A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** of the **.obj** file.
@@ -8,10 +8,16 @@ A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** 
 
 ## Newly Updated!
 
- 1. Added static grid
- 2. Added a UI that allows you to see three axes simultaneously on the right side
+1. New algorithm for scaling and rotation
+2. When loading an obj file, the longest length of the obj file is displayed.
+3. When setting the size, it shows as a line which standard the distance was referred to
+4. Rotation value changes can be reversed by pressing Ctrl +Z
 
-  ㅤ
+## Bug Fixed
+
+1. Add action for invalid input value when setting object size
+2. Increased accuracy of clicks on gizmos
+3. A fatal problem in which objects are reversed and stored
 
 ## Program Features
 
