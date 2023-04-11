@@ -4,7 +4,7 @@
 
 
 A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** of the **.obj** file.
-![enter image description here](https://drive.google.com/uc?export=view&id=1zH1yMuTDMcmQsQm8aR7h8ZTx2VJPaZRb)
+![enter image description here](https://drive.google.com/uc?export=view&id=1G2mZ9omopzyq7dD563da6RGQn55cJ65D)
 
 ## Newly Updated!
 
