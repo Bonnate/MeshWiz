@@ -194,9 +194,18 @@ public class UtilityManager : MonoBehaviour
         GameObject.Destroy(leftArrow, duration);
 
         GameObject rightArrow = GameObject.Instantiate(spherePrefab);
+        _DrawLineInstantiatedGos.Add(rightArrow);
+        rightArrow.transform.SetParent(lineRendererObj.transform);
+        rightArrow.transform.position = end;
+        rightArrow.transform.localScale = Vector3.one * width / 50.0f;
+        rightArrow.transform.SetParent(MeshController.Instance.CurrentGo.transform.parent);
+        rightArrow.transform.eulerAngles = Camera.main.transform.right;
+        GameObject.Destroy(rightArrow, duration);        
 
         GameObject.Destroy(lineRendererObj, duration);
     }
+
+        private static List<GameObject> _DrawBoundsInstantiatedGos = new List<GameObject>();
 
     /// <summary>
     /// Bounds를 기준으로 그 모습을 렌더러로 그림
