@@ -64,7 +64,7 @@ public class UtilityManager : MonoBehaviour
         StringBuilder sb = new StringBuilder();
 
         // Something Description
-        sb.AppendLine("# Modified by MeshResizer powered by Bonnate");
+        sb.AppendLine($"# Modified by MeshResizer v{Application.version} powered by Bonnate");
         sb.AppendLine($"# Modified when {System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
         sb.AppendLine("# https://github.com/Bonnate/MeshResizer");
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using DialogBox;
+using System.IO;
 
 public class MeshController : Singleton<MeshController>
 {
@@ -74,7 +74,6 @@ public class MeshController : Singleton<MeshController>
         Destroy(CurrentGo);
 
         CurrentGo = obj;
-        CurrentGo.AddComponent<OBJExportManager>();
 
         CurrentGo.transform.SetParent(mCenterPivotTransform);
         mCenterPivotTransform.localScale = new Vector3(-1, 1, 1);
@@ -111,7 +110,11 @@ public class MeshController : Singleton<MeshController>
             return;
         }
 
-        CurrentGo.GetComponent<OBJExportManager>().ExportToLocal();
+        // 오브젝트를 파일로 쓰기
+        string str = UtilityManager.MeshToObjString(CurrentGo.GetComponent<MeshFilter>());
+        FileStream stream = new FileStream(FileBrowserRuntime.Instance.CurrentPath.Replace(".obj", "") + "_modified.obj", FileMode.OpenOrCreate);
+        stream.Write(System.Text.Encoding.UTF8.GetBytes(str));
+        stream.Close();
     }
 
     #endregion
