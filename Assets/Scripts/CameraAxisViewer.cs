@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CameraAxisViewer : MonoBehaviour
+public class CameraAxisViewer : Singleton<CameraAxisViewer>
 {
     [SerializeField] private GameObject[] mViewTransforms;
     [SerializeField] private Image mCameraStateImage;
 
     [SerializeField] Camera mMainCamera;
-    [SerializeField] Camera[] mOverlayCameras;
+    private Camera[] mOverlayCameras;
 
     [SerializeField] private float mMinFOV;
     [SerializeField] private float mMaxFOV;
-    private float mCurrentFOV;
+
+    [SerializeField] private Slider mFOVSlider;
+
+    private float mCurrentFOV, mPrevFOV;
 
     private void Start()
     {
+        mOverlayCameras = FindObjectsOfType<Camera>(true);
+
         mCurrentFOV = mMainCamera.orthographicSize;
 
         BTN_ChangeViewPos(0);
@@ -24,7 +29,33 @@ public class CameraAxisViewer : MonoBehaviour
 
     private void Update()
     {
+        if(FileBrowserRuntime.IsDialogEnabled)
+            return;
+
         UpdateCameraSize();
+
+        if(Input.GetKeyDown(KeyCode.F))
+            BTN_ChangeViewPos(0);
+
+        if(Input.GetKeyDown(KeyCode.T))
+            BTN_ChangeViewPos(1);
+
+        if(Input.GetKeyDown(KeyCode.R))
+            BTN_ChangeViewPos(2);     
+
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            RotateSystemManager.Instance.InputHandler(RotateSystemManager.START_ROTATE);
+            MeshController.Instance.BTN_ResetRotation();
+        }
+    }
+
+    public void SetCurrentFOV(float amount)
+    {
+        mFOVSlider.SetValueWithoutNotify(amount);
+
+        mPrevFOV = mCurrentFOV;
+        mCurrentFOV = amount;
     }
 
     private void UpdateCameraSize()
@@ -33,9 +64,12 @@ public class CameraAxisViewer : MonoBehaviour
 
         mCurrentFOV += wheelInput * 30.0f * Time.deltaTime;
 
+        if(wheelInput != 0f)
+            mFOVSlider.SetValueWithoutNotify(mCurrentFOV);
+
         mCurrentFOV = Mathf.Clamp(mCurrentFOV, mMinFOV, mMaxFOV);
 
-        mMainCamera.orthographicSize = Mathf.Lerp(mMainCamera.orthographicSize, mCurrentFOV, Time.deltaTime * 5.0f);
+        mMainCamera.orthographicSize = mPrevFOV = Mathf.Lerp(mPrevFOV, mCurrentFOV, Time.deltaTime * 2.5f);
 
         foreach (Camera camera in mOverlayCameras)
             camera.orthographicSize = mMainCamera.orthographicSize;
@@ -61,4 +95,8 @@ public class CameraAxisViewer : MonoBehaviour
         }
     }
 
+    public void SLIDER_ModifyFOV()
+    {
+        SetCurrentFOV(mFOVSlider.value);
+    }
 }

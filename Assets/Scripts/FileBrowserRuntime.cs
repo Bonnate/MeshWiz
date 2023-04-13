@@ -7,12 +7,20 @@ using Dummiesman;
 
 public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
 {
+    /// <summary>
+    /// 현재 다이얼로그 창이 열려있는가?
+    /// </summary>
+    /// <value></value>
+    public static bool IsDialogEnabled { private set; get; }
+
     public string mCurrentPath;
     public string mCurrentFileName;
 
     IEnumerator ShowLoadDialogCoroutine()
     {
         yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.FilesAndFolders, true, null, null, "Load Files and Folders", "Load");
+
+        IsDialogEnabled = false;
 
         if (FileBrowser.Success)
         {
@@ -35,6 +43,8 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
 
     public void BTN_LoadObjFile()
     {
+        IsDialogEnabled = true;
+
         FileBrowser
            .SetFilters(true, new FileBrowser
            .Filter("Files", ".json")

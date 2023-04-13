@@ -11,7 +11,9 @@ public class MeshController : Singleton<MeshController>
     [SerializeField] private TMP_InputField mResizeInputField;
 
     //현재 활성화된 오브젝트
-    [SerializeField] public GameObject CurrentGo = null;
+    [HideInInspector] public GameObject CurrentGo = null;
+    [HideInInspector] public Bounds CurrentGoBounds;
+    [HideInInspector] public float CurrentGoMaxLength;
 
     /// <summary>
     /// 오브젝트의 크기를 설정
@@ -20,18 +22,44 @@ public class MeshController : Singleton<MeshController>
     /// <param name="meter"></param>
     private void SetScale(float meter)
     {
-        Transform currentObjTransform = CurrentGo.transform;
+        // Bounding Box 재구성
+        CurrentGoBounds = UtilityManager.RecalculateBoundingBox(CurrentGo.GetComponent<MeshFilter>());
+        (Vector3 startPos, Vector3 endPos) = UtilityManager.GetLongestAxisVectors(CurrentGoBounds);
+        CurrentGoMaxLength = (startPos - endPos).magnitude;
 
-        float longestLength = UtilityManager.GetLongestVertexLengthWithScale(CurrentGo.GetComponent<MeshFilter>().sharedMesh, currentObjTransform, false);
-
-        float scaleDelta = longestLength;
-        currentObjTransform.localScale = currentObjTransform.localScale / scaleDelta * meter;
+        // 크기 설정
+        CurrentGo.transform.localScale = CurrentGo.transform.localScale / CurrentGoMaxLength * meter;
 
         // 중앙으로 이동
         UtilityManager.SetPositionViaCenter(CurrentGo.transform, Vector3.zero);
 
+        // 변경된 크기를 기반으로 Bounding Box 재구성 및 렌더링
+        CurrentGoBounds = UtilityManager.RecalculateBoundingBox(CurrentGo.GetComponent<MeshFilter>());
+        (startPos, endPos) = UtilityManager.GetLongestAxisVectors(CurrentGoBounds);
+        CurrentGoMaxLength = (startPos - endPos).magnitude;        
+        UtilityManager.DrawLine(startPos, endPos, CurrentGoMaxLength);
+        UtilityManager.DrawBounds(CurrentGoBounds, CurrentGoMaxLength);
+
         // 축 크기 설정
-        RotateSystemManager.Instance.SetAxisScale(UtilityManager.GetLongestVertexLengthWithScale(CurrentGo.GetComponent<MeshFilter>().sharedMesh, CurrentGo.transform, true));
+        RotateSystemManager.Instance.SetAxisScale(CurrentGoMaxLength);
+
+        // 카메라 뷰 설정
+        SetCameraFOV();
+    }
+
+    private void SetCameraFOV()
+    {
+        float minInput = 1.0f;
+        float maxInput = 1000.0f;
+        float minOutput = 0.01f;
+        float maxOutput = 5.0f;
+
+        float inputValueRange = maxInput - minInput;
+        float outputValueRange = maxOutput - minOutput;
+        float normalizedValue = ((CurrentGoMaxLength * 100f) - minInput) / inputValueRange;
+        float convertedValue = (normalizedValue * outputValueRange) + minOutput;
+
+        CameraAxisViewer.Instance.SetCurrentFOV(convertedValue);
     }
 
     #region Load / Export
@@ -54,13 +82,21 @@ public class MeshController : Singleton<MeshController>
         // 중앙으로 이동
         UtilityManager.SetPositionViaCenter(CurrentGo.transform, Vector3.zero);
 
-        // 가장 긴 축 길이 획득
-        float longestLength = UtilityManager.GetLongestVertexLengthWithScale(CurrentGo.GetComponent<MeshFilter>().sharedMesh, CurrentGo.transform, true);
+        // Bounding Box 생성 및 렌더링
+        CurrentGoBounds = UtilityManager.RecalculateBoundingBox(CurrentGo.GetComponent<MeshFilter>());
+        (Vector3 startPos, Vector3 endPos) = UtilityManager.GetLongestAxisVectors(CurrentGoBounds);
+        CurrentGoMaxLength = (startPos - endPos).magnitude;        
+        UtilityManager.DrawLine(startPos, endPos, CurrentGoMaxLength);
+        UtilityManager.DrawBounds(CurrentGoBounds, CurrentGoMaxLength);
 
         // 축 크기 설정
-        RotateSystemManager.Instance.SetAxisScale(longestLength);
+        RotateSystemManager.Instance.SetAxisScale(CurrentGoMaxLength);
 
-        mResizeInputField.text = (longestLength * 100f).ToString("F0");
+        // 현재 길이를 표시
+        mResizeInputField.text = (CurrentGoMaxLength * 100f).ToString("F0");
+
+        // 카메라 뷰 설정
+        SetCameraFOV();
     }
 
     /// <summary>
@@ -76,6 +112,7 @@ public class MeshController : Singleton<MeshController>
 
         CurrentGo.GetComponent<OBJExportManager>().ExportToLocal();
     }
+
     #endregion
 
     #region Button Events

@@ -11,7 +11,11 @@ using System.Text;
 
 public class UtilityManager : MonoBehaviour
 {
-    //자식 레이어 전체 레이어를 변경하는 함수
+    /// <summary>
+    /// 자식 레이어 전체 레이어를 변경
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="newLayer"></param>
     public static void SetLayerRecursively(GameObject obj, int newLayer)
     {
         if (null == obj)
@@ -31,37 +35,11 @@ public class UtilityManager : MonoBehaviour
         }
     }
 
-    //비활성화된 자식 컴포넌트를 찾음
-    static public TType GetComponentInChildren<TType>(GameObject objRoot) where TType : Component
-    {
-        // if we don't find the component in this object 
-        // recursively iterate children until we do
-        TType tRetComponent = objRoot.GetComponent<TType>();
-
-        if (null == tRetComponent)
-        {
-            // transform is what makes the hierarchy of GameObjects, so 
-            // need to access it to iterate children
-            Transform trnsRoot = objRoot.transform;
-            int iNumChildren = trnsRoot.childCount;
-
-            // could have used foreach(), but it causes GC churn
-            for (int iChild = 0; iChild < iNumChildren; ++iChild)
-            {
-                // recursive call to this function for each child
-                // break out of the loop and return as soon as we find 
-                // a component of the specified type
-                tRetComponent = GetComponentInChildren<TType>(trnsRoot.GetChild(iChild).gameObject);
-                if (null != tRetComponent)
-                {
-                    break;
-                }
-            }
-        }
-
-        return tRetComponent;
-    }
-
+    /// <summary>
+    /// 대상 오브젝트를 피벗의 관계 없이 destination의 위치로 중간에 위치시킴
+    /// </summary>
+    /// <param name="targetTransform"></param>
+    /// <param name="destination"></param>
     public static void SetPositionViaCenter(Transform targetTransform, Vector3 destination)
     {
         BoxCollider collider = targetTransform.GetComponent<BoxCollider>();
@@ -76,42 +54,11 @@ public class UtilityManager : MonoBehaviour
         Destroy(collider);
     }
 
-    public static GameObject GetPivotCenter(GameObject targetGo)
-    {
-        Vector3 center = Vector3.zero;
-        int count = 0;
-
-        // 자식 오브젝트들의 MeshFilter 컴포넌트 검사
-        foreach (MeshFilter mf in targetGo.GetComponentsInChildren<MeshFilter>())
-        {
-            // 메쉬 정보를 가져와서 메쉬의 중심점 계산
-            Vector3 meshCenter = mf.mesh.bounds.center;
-
-            // 로컬 좌표계 상의 중심점을 전역 좌표계 상의 좌표로 변환
-            meshCenter = mf.transform.TransformPoint(meshCenter);
-
-            // 중심점 누적값 계산
-            center += meshCenter;
-            ++count;
-        }
-
-        if (count > 0)
-        {
-            // 자식 오브젝트들의 중심점 평균값 반환
-            center /= count;
-        }
-
-        // 피벗 중심의 위치에 회전을 위한 부모 오브젝트 생성
-        GameObject rotateAxis = new GameObject($"Rotate Axis for {targetGo.name}");
-        rotateAxis.transform.position = center;
-
-        // 회전 축을 부모로 지정
-        targetGo.transform.SetParent(rotateAxis.transform);
-
-        // 회전축 오브젝트를 리턴
-        return rotateAxis;
-    }
-
+    /// <summary>
+    /// meshFilter의 mesh를 string으로 작성
+    /// </summary>
+    /// <param name="meshFilter"></param>
+    /// <returns></returns>
     public static string MeshToObjString(MeshFilter meshFilter)
     {
         StringBuilder sb = new StringBuilder();
@@ -161,7 +108,8 @@ public class UtilityManager : MonoBehaviour
         return sb.ToString();
     }
 
-    public static float GetLongestVertexLengthWithScale(Mesh mesh, Transform transform, bool isDrawLine, int sampleCount = 1000)
+
+    public static float GetLongestVertexLengthWithScale(Mesh mesh, Transform transform, int sampleCount = 1000)
     {
         Vector3 pos1 = Vector3.zero, pos2 = Vector3.zero;
 
@@ -194,33 +142,211 @@ public class UtilityManager : MonoBehaviour
             }
         }
 
-        if(isDrawLine)
-            DrawLine(pos1, pos2, longestLength);
-
         return longestLength;
     }
 
-    public static void DrawLine(Vector3 start, Vector3 end, float scale)
+    private static List<GameObject> _DrawLineInstantiatedGos = new List<GameObject>();
+
+    /// <summary>
+    /// 두 점 사이를 렌더러로 그림
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <param name="scale"></param>
+    public static void DrawLine(Vector3 start, Vector3 end, float width, float duration = 5.0f)
     {
-        // Load LineRenderer resource from the Resources folder
-        GameObject lineRendererPrefab = Resources.Load<GameObject>("LineRenderer");
+        for(int i = _DrawLineInstantiatedGos.Count - 1; i >= 0; --i)
+        {
+            Destroy(_DrawLineInstantiatedGos[i]);
+            _DrawLineInstantiatedGos.RemoveAt(i);
+        }
+
+        GameObject lineRendererPrefab = Resources.Load<GameObject>("LineRenderer(Length)");
+        GameObject spherePrefab = Resources.Load<GameObject>("Sphere(Length)");
         if (lineRendererPrefab == null)
         {
             Debug.LogError("LineRenderer prefab not found in the Resources folder.");
             return;
         }
+        if (spherePrefab == null)
+        {
+            Debug.LogError("Sphere prefab not found in the Resources folder.");
+            return;
+        }
 
-        // Instantiate LineRenderer and set its positions
         GameObject lineRendererObj = GameObject.Instantiate(lineRendererPrefab);
+        _DrawLineInstantiatedGos.Add(lineRendererObj);
 
-        lineRendererObj.transform.SetParent(MeshController.Instance.CurrentGo.transform);
+        lineRendererObj.transform.SetParent(MeshController.Instance.CurrentGo.transform.parent);
         lineRendererObj.transform.localPosition = Vector3.zero;
 
         LineRenderer lineRenderer = lineRendererObj.GetComponent<LineRenderer>();
-        lineRenderer.endWidth = lineRenderer.startWidth = scale / 50.0f;
+        lineRenderer.endWidth = lineRenderer.startWidth = width / 100.0f;
         lineRenderer.SetPositions(new Vector3[] { start, end });
 
-        // Destroy LineRenderer after 3 seconds
-        GameObject.Destroy(lineRendererObj, 3f);
+        GameObject leftArrow = GameObject.Instantiate(spherePrefab);
+        _DrawLineInstantiatedGos.Add(leftArrow);
+        leftArrow.transform.SetParent(lineRendererObj.transform);
+        leftArrow.transform.position = start;
+        leftArrow.transform.localScale = Vector3.one * width / 50.0f;
+        leftArrow.transform.SetParent(MeshController.Instance.CurrentGo.transform.parent);
+        leftArrow.transform.eulerAngles = -Camera.main.transform.right;
+        GameObject.Destroy(leftArrow, duration);
+
+        GameObject rightArrow = GameObject.Instantiate(spherePrefab);
+
+        GameObject.Destroy(lineRendererObj, duration);
+    }
+
+    /// <summary>
+    /// Bounds를 기준으로 그 모습을 렌더러로 그림
+    /// </summary>
+    /// <param name="bounds"></param>
+    /// <param name="color"></param>
+    /// <param name="width"></param>
+    public static void DrawBounds(Bounds bounds, float width, float duration = 5.0f)
+    {
+        for(int i = _DrawBoundsInstantiatedGos.Count - 1; i >= 0; --i)
+        {
+            Destroy(_DrawBoundsInstantiatedGos[i]);
+            _DrawBoundsInstantiatedGos.RemoveAt(i);
+        }
+
+        GameObject lineRendererPrefab = Resources.Load<GameObject>("LineRenderer(Bounding)");
+        GameObject spherePrefab = Resources.Load<GameObject>("Sphere(Bounding)");
+        if (lineRendererPrefab == null)
+        {
+            Debug.LogError("LineRenderer prefab not found in the Resources folder.");
+            return;
+        }
+        if (spherePrefab == null)
+        {
+            Debug.LogError("Sphere prefab not found in the Resources folder.");
+            return;
+        }
+
+        GameObject lineRendererObj = GameObject.Instantiate(lineRendererPrefab);
+        _DrawBoundsInstantiatedGos.Add(lineRendererObj);
+        lineRendererObj.transform.SetParent(MeshController.Instance.CurrentGo.transform.parent);
+
+        Vector3[] corners = new Vector3[8];
+        corners[0] = bounds.center + new Vector3(-bounds.extents.x, -bounds.extents.y, -bounds.extents.z);
+        corners[1] = bounds.center + new Vector3(-bounds.extents.x, -bounds.extents.y, bounds.extents.z);
+        corners[2] = bounds.center + new Vector3(bounds.extents.x, -bounds.extents.y, bounds.extents.z);
+        corners[3] = bounds.center + new Vector3(bounds.extents.x, -bounds.extents.y, -bounds.extents.z);
+        corners[4] = bounds.center + new Vector3(-bounds.extents.x, bounds.extents.y, -bounds.extents.z);
+        corners[5] = bounds.center + new Vector3(-bounds.extents.x, bounds.extents.y, bounds.extents.z);
+        corners[6] = bounds.center + new Vector3(bounds.extents.x, bounds.extents.y, bounds.extents.z);
+        corners[7] = bounds.center + new Vector3(bounds.extents.x, bounds.extents.y, -bounds.extents.z);
+
+        for (int i = 0; i < corners.Length; i++)
+        {
+            GameObject sphereObj = GameObject.Instantiate(spherePrefab);
+            _DrawBoundsInstantiatedGos.Add(sphereObj);
+            sphereObj.transform.SetParent(lineRendererObj.transform);
+            sphereObj.transform.position = corners[i];
+            sphereObj.transform.localScale = Vector3.one * width / 50.0f;
+            sphereObj.transform.SetParent(MeshController.Instance.CurrentGo.transform.parent);
+            GameObject.Destroy(sphereObj, duration);
+        }
+
+        LineRenderer lineRenderer = lineRendererObj.GetComponent<LineRenderer>();
+        lineRenderer.endWidth = lineRenderer.startWidth = width / 200.0f;
+        lineRenderer.positionCount = 16;
+
+        lineRenderer.SetPosition(0, corners[0]);
+        lineRenderer.SetPosition(1, corners[1]);
+        lineRenderer.SetPosition(2, corners[2]);
+        lineRenderer.SetPosition(3, corners[3]);
+        lineRenderer.SetPosition(4, corners[0]);
+        lineRenderer.SetPosition(5, corners[4]);
+        lineRenderer.SetPosition(6, corners[5]);
+        lineRenderer.SetPosition(7, corners[1]);
+        lineRenderer.SetPosition(8, corners[5]);
+        lineRenderer.SetPosition(9, corners[6]);
+        lineRenderer.SetPosition(10, corners[2]);
+        lineRenderer.SetPosition(11, corners[6]);
+        lineRenderer.SetPosition(12, corners[7]);
+        lineRenderer.SetPosition(13, corners[3]);
+        lineRenderer.SetPosition(14, corners[7]);
+        lineRenderer.SetPosition(15, corners[4]);
+
+        GameObject.Destroy(lineRendererObj, duration);        
+    }
+
+    /// <summary>
+    /// Bounding Box를 현재 모습으로 재생성
+    /// </summary>
+    /// <param name="meshFilter"></param>
+    /// <returns></returns>
+    public static Bounds RecalculateBoundingBox(MeshFilter meshFilter)
+    {
+        Mesh mesh = meshFilter.sharedMesh;
+
+        // 원본 mesh의 vertices와 triangles를 복사
+        Vector3[] originalVertices = mesh.vertices;
+        int[] triangles = mesh.triangles;
+
+        // 현재 transform의 rotation, scale 값을 적용하여 vertices를 재생성
+        Vector3[] vertices = new Vector3[originalVertices.Length];
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            vertices[i] = meshFilter.transform.TransformPoint(originalVertices[i]);
+        }
+
+        // mesh의 vertices를 재설정
+        mesh.vertices = vertices;
+        mesh.RecalculateBounds();
+
+        // bounding box를 계산
+        Bounds bounds = mesh.bounds;
+
+        // 원본 mesh의 vertices와 triangles를 복원
+        mesh.vertices = originalVertices;
+        mesh.triangles = triangles;
+        mesh.RecalculateBounds();
+
+        return bounds;
+    }
+
+    /// <summary>
+    /// Bounding Box에서 가장 긴 축을 리턴
+    /// </summary>
+    /// <param name="bounds"></param>
+    /// <returns></returns>
+    public static (Vector3, Vector3) GetLongestAxisVectors(Bounds bounds)
+    {
+        Vector3 center = bounds.center;
+        Vector3 extents = bounds.extents;
+
+        Vector3 xVector = new Vector3(extents.x, 0f, 0f);
+        Vector3 yVector = new Vector3(0f, extents.y, 0f);
+        Vector3 zVector = new Vector3(0f, 0f, extents.z);
+
+        Vector3 xMaxPoint = center + xVector;
+        Vector3 xMinPoint = center - xVector;
+
+        Vector3 yMaxPoint = center + yVector;
+        Vector3 yMinPoint = center - yVector;
+
+        Vector3 zMaxPoint = center + zVector;
+        Vector3 zMinPoint = center - zVector;
+
+        float xLength = Vector3.Distance(xMaxPoint, xMinPoint);
+        float yLength = Vector3.Distance(yMaxPoint, yMinPoint);
+        float zLength = Vector3.Distance(zMaxPoint, zMinPoint);
+
+        if (xLength >= yLength && xLength >= zLength)
+        {
+            return (xMaxPoint, xMinPoint);
+        }
+        else if (yLength >= xLength && yLength >= zLength)
+        {
+            return (yMaxPoint, yMinPoint);
+        }
+        else
+        {
+            return (zMaxPoint, zMinPoint);
+        }
     }
 }

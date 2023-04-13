@@ -18,6 +18,7 @@ public class RotateSystemManager : Singleton<RotateSystemManager>
     private Ray mCamRay;
 
     private Stack<Vector3> mEulerRotHistoryStack = new Stack<Vector3>();
+    private Stack<Vector3> mEulerRotHistoryStackRedo = new Stack<Vector3>();
 
     private void Start()
     {
@@ -25,11 +26,16 @@ public class RotateSystemManager : Singleton<RotateSystemManager>
 
         //Generate Ray
         mCamRay = new Ray(mMainCamera.transform.position, mMainCamera.transform.forward);
+
+        SetAxisScale(0f);
     }
 
     private void Update()
     {
-        if (RotateSystem.IsEnabled) { return; }
+        if (RotateSystem.IsEnabled)
+            return;
+        if (FileBrowserRuntime.IsDialogEnabled)
+            return;
 
         Ray ray = mMainCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -42,9 +48,11 @@ public class RotateSystemManager : Singleton<RotateSystemManager>
             }
         }
 
-        if(RotateSystem.IsEnabled == false && Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z))
+        if(RotateSystem.IsEnabled == false && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftCommand)) && Input.GetKeyDown(KeyCode.Z))
             InputHandler(UNDO_ROTATE);
 
+        if(Input.GetKeyDown(KeyCode.A))
+            mRotateWorldAxisToggle.isOn = !mRotateWorldAxisToggle.isOn;
     }
 
     public void InputHandler(string message)
@@ -62,7 +70,6 @@ public class RotateSystemManager : Singleton<RotateSystemManager>
                     if(mEulerRotHistoryStack.Count > 0)
                     {
                         Vector3 eulerAngles = mEulerRotHistoryStack.Pop();
-                        Debug.Log(eulerAngles);
                         mRootRotateAxis.eulerAngles = eulerAngles;
                     }
                     break;
