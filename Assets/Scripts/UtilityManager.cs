@@ -63,7 +63,24 @@ public class UtilityManager : MonoBehaviour
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendLine("g mesh"); // Object group name
+        // Something Description
+        sb.AppendLine("# Modified by MeshResizer powered by Bonnate");
+        sb.AppendLine($"# Modified when {System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+        sb.AppendLine("# https://github.com/Bonnate/MeshResizer");
+
+        // Restore mtl option
+        if(MeshController.Instance.CurrentGoMtlLibStr is not null)
+        {
+            sb.AppendLine();
+            sb.AppendLine("# Path to the material library file used by the model");
+            sb.AppendLine(MeshController.Instance.CurrentGoMtlLibStr);
+        }
+
+        // Object group name
+        sb.AppendLine();
+        sb.AppendLine("# Object group name");
+        sb.AppendLine($"g {meshFilter.gameObject.name}");
+        sb.AppendLine();
 
         // Transform matrix with rotation and scale
         Matrix4x4 transformMatrix = Matrix4x4.TRS(

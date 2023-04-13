@@ -14,6 +14,7 @@ public class MeshController : Singleton<MeshController>
     [HideInInspector] public GameObject CurrentGo = null;
     [HideInInspector] public Bounds CurrentGoBounds;
     [HideInInspector] public float CurrentGoMaxLength;
+    [HideInInspector] public string? CurrentGoMtlLibStr = null; // 현재 오브젝트의 mtllib 값
 
     /// <summary>
     /// 오브젝트의 크기를 설정

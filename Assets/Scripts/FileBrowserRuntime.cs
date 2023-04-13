@@ -13,8 +13,8 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
     /// <value></value>
     public static bool IsDialogEnabled { private set; get; }
 
-    public string mCurrentPath;
-    public string mCurrentFileName;
+    [HideInInspector] public string CurrentPath { private set; get; }
+    [HideInInspector] public string CurrentFileName { private set; get; }
 
     IEnumerator ShowLoadDialogCoroutine()
     {
@@ -26,13 +26,14 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
         {
             byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(FileBrowser.Result[0]);
 
-            mCurrentPath = FileBrowser.Result[0];
-            mCurrentFileName = Path.GetFileName(mCurrentPath);
+            CurrentPath = FileBrowser.Result[0];
+            CurrentFileName = Path.GetFileName(CurrentPath);
 
-            Debug.Log(mCurrentPath);
-            Debug.Log(mCurrentFileName);
+            Debug.Log(CurrentPath);
+            Debug.Log(CurrentFileName);
 
             GameObject newObj = new OBJLoader().Load(new MemoryStream(bytes));
+            newObj.name = CurrentFileName;
             newObj.SetActive(true);
             newObj.transform.localScale = Vector3.one;
 

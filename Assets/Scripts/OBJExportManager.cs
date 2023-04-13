@@ -27,7 +27,7 @@ public class OBJExportManager : Singleton<OBJExportManager>
         //로컬에 다운로드
         // string str = MeshToString(GetComponent<MeshFilter>());
         string str = UtilityManager.MeshToObjString(GetComponent<MeshFilter>());
-        FileStream stream = new FileStream(FileBrowserRuntime.Instance.mCurrentPath.Replace(".obj", "") + "_resized.obj", FileMode.OpenOrCreate);
+        FileStream stream = new FileStream(FileBrowserRuntime.Instance.CurrentPath.Replace(".obj", "") + "_resized.obj", FileMode.OpenOrCreate);
         stream.Write(System.Text.Encoding.UTF8.GetBytes(str));
         stream.Close();
     }    

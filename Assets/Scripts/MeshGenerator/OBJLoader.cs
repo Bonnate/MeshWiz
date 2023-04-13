@@ -40,11 +40,11 @@ namespace Dummiesman
         //materials, accessed by objobjectbuilder
         internal Dictionary<string, Material> Materials;
 
-        //file info for files loaded from file path, used for GameObject naming and MTL finding
-        private FileInfo _objInfo;
-
         public GameObject Load(Stream input)
         {
+            // 초기화
+            MeshController.Instance.CurrentGoMtlLibStr = null;
+
             var reader = new StreamReader(input);
             //var reader = new StringReader(inputReader.ReadToEnd());
 
@@ -123,6 +123,15 @@ namespace Dummiesman
                     continue;
                 }
 
+				if (buffer.Is("mtllib")) {
+                    buffer.ReadUntilNewLine();
+					string mtllibStr = buffer.GetString();
+                    MeshController.Instance.CurrentGoMtlLibStr = $"mtllib{mtllibStr}";
+                    Debug.Log(MeshController.Instance.CurrentGoMtlLibStr);
+
+                    continue;
+                }                
+
                 //new object
                 if ((buffer.Is("o") || buffer.Is("g")) && SplitMode == SplitMode.Object) {
                     buffer.ReadUntilNewLine();
@@ -198,25 +207,6 @@ namespace Dummiesman
 
 				buffer.SkipUntilNewLine();
             }
-
-
-            //수정 전 오리진
-            // //finally, put it all together
-            // GameObject obj = new GameObject(_objInfo != null ? Path.GetFileNameWithoutExtension(_objInfo.Name) : "WavefrontObject");
-            // obj.transform.localScale = new Vector3(-1f, 1f, 1f);
-
-            // foreach (var builder in builderDict)
-            // {
-            //     //empty object
-            //     if (builder.Value.PushedFaceCount == 0)
-            //         continue;
-
-            //     var builtObj = builder.Value.Build();
-            //     builtObj.transform.SetParent(obj.transform, false);
-            // }
-
-            // return obj
-
 
             //수정, 오브젝트 하나만 리턴한다고 가정한다.
             foreach (var builder in builderDict)
