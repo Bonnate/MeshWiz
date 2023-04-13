@@ -16,6 +16,9 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
     [HideInInspector] public string CurrentPath { private set; get; }
     [HideInInspector] public string CurrentFileName { private set; get; }
 
+    private System.Text.StringBuilder receivedString = new System.Text.StringBuilder();
+    private int expectedLength = 0;
+
     IEnumerator ShowLoadDialogCoroutine()
     {
         yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.FilesAndFolders, true, null, null, "Load Files and Folders", "Load");
@@ -25,25 +28,29 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
         if (FileBrowser.Success)
         {
             byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(FileBrowser.Result[0]);
-
             CurrentPath = FileBrowser.Result[0];
-            CurrentFileName = Path.GetFileName(CurrentPath);
 
-            Debug.Log(CurrentPath);
-            Debug.Log(CurrentFileName);
-
-            GameObject newObj = new OBJLoader().Load(new MemoryStream(bytes));
-            newObj.name = CurrentFileName;
-            newObj.SetActive(true);
-            newObj.transform.localScale = Vector3.one;
-
-            //메시 컨트롤러에 로드한 obj를 등록
-            MeshController.Instance.Load(newObj);
+            LoadObjFileViaMemoryStream(new MemoryStream(bytes), Path.GetFileName(CurrentPath));
         }
+    }
+
+    public void LoadObjFileViaMemoryStream(MemoryStream bytes, string fileName)
+    {
+        GameObject newObj = new OBJLoader().Load(bytes);
+        newObj.name = CurrentFileName = fileName;
+        newObj.SetActive(true);
+        newObj.transform.localScale = Vector3.one;
+
+        //메시 컨트롤러에 로드한 obj를 등록
+        MeshController.Instance.Load(newObj);
     }
 
     public void BTN_LoadObjFile()
     {
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+            return;
+
+        // WebGL이 아닌 타입이라면?
         IsDialogEnabled = true;
 
         FileBrowser

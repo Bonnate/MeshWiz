@@ -112,9 +112,17 @@ public class MeshController : Singleton<MeshController>
 
         // 오브젝트를 파일로 쓰기
         string str = UtilityManager.MeshToObjString(CurrentGo.GetComponent<MeshFilter>());
-        FileStream stream = new FileStream(FileBrowserRuntime.Instance.CurrentPath.Replace(".obj", "") + "_modified.obj", FileMode.OpenOrCreate);
-        stream.Write(System.Text.Encoding.UTF8.GetBytes(str));
-        stream.Close();
+
+        if(Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            WebGLFileSaver.SaveFile(str, FileBrowserRuntime.Instance.CurrentFileName.Replace(".obj", "") + "_modified.obj");
+        }
+        else
+        {
+            FileStream stream = new FileStream(FileBrowserRuntime.Instance.CurrentFileName.Replace(".obj", "") + "_modified.obj", FileMode.OpenOrCreate);
+            stream.Write(System.Text.Encoding.UTF8.GetBytes(str));
+            stream.Close();
+        }
     }
 
     #endregion

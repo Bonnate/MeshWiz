@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using UnityEngine;
 using System.IO;
-using System.Collections.Generic;
 using System.Text;
 
 public class UtilityManager : MonoBehaviour

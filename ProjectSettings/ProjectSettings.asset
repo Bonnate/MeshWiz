@@ -44,10 +44,10 @@ PlayerSettings:
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 1024
-  defaultScreenWidthWeb: 960
-  defaultScreenHeightWeb: 600
+  defaultScreenWidthWeb: 1280
+  defaultScreenHeightWeb: 720
   m_StereoRenderingPath: 0
-  m_ActiveColorSpace: 1
+  m_ActiveColorSpace: 0
   m_MTRendering: 1
   mipStripping: 0
   numberOfMipsStripped: 0
@@ -76,7 +76,7 @@ PlayerSettings:
   androidFullscreenMode: 1
   defaultIsNativeResolution: 1
   macRetinaSupport: 1
-  runInBackground: 1
+  runInBackground: 0
   captureSingleScreen: 0
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
@@ -521,7 +521,8 @@ PlayerSettings:
   openGLRequireES31: 0
   openGLRequireES31AEP: 0
   openGLRequireES32: 0
-  m_TemplateCustomTags: {}
+  m_TemplateCustomTags:
+    TOTAL_MEMORY: 
   mobileMTRendering:
     Android: 1
     iPhone: 1
@@ -770,7 +771,7 @@ PlayerSettings:
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: APPLICATION:Default
+  webGLTemplate: APPLICATION:Minimal
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 1
@@ -780,24 +781,24 @@ PlayerSettings:
   webGLDecompressionFallback: 1
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: UNITY_VISUAL_SCRIPTING
+    Android: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
     CloudRendering: UNITY_VISUAL_SCRIPTING
-    EmbeddedLinux: UNITY_VISUAL_SCRIPTING
+    EmbeddedLinux: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
     GameCoreScarlett: CT_FB;CT_PROC;CT_FB_DEMO;CT_UI
-    GameCoreXboxOne: CT_FB;CT_PROC;CT_FB_DEMO;CT_UI
-    Lumin: CT_FB;CT_PROC;CT_FB_DEMO;CT_UI
-    Nintendo Switch: UNITY_VISUAL_SCRIPTING
-    PS4: UNITY_VISUAL_SCRIPTING
-    PS5: CT_FB;CT_PROC;CT_FB_DEMO;CT_UI
+    GameCoreXboxOne: CT_FB;CT_PROC;CT_FB_DEMO;CT_UI;CT_RTFB
+    Lumin: CT_FB;CT_PROC;CT_FB_DEMO;CT_UI;CT_RTFB
+    Nintendo Switch: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
+    PS4: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
+    PS5: CT_FB;CT_PROC;CT_FB_DEMO;CT_UI;CT_RTFB
     QNX: UNITY_VISUAL_SCRIPTING
     Server: UNITY_VISUAL_SCRIPTING
-    Stadia: UNITY_VISUAL_SCRIPTING
-    Standalone: UNITY_VISUAL_SCRIPTING
-    WebGL: UNITY_VISUAL_SCRIPTING
-    Windows Store Apps: UNITY_VISUAL_SCRIPTING
-    XboxOne: UNITY_VISUAL_SCRIPTING
-    iPhone: UNITY_VISUAL_SCRIPTING
-    tvOS: UNITY_VISUAL_SCRIPTING
+    Stadia: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
+    Standalone: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
+    WebGL: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
+    Windows Store Apps: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
+    XboxOne: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
+    iPhone: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
+    tvOS: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
@@ -808,7 +809,7 @@ PlayerSettings:
   allowUnsafeCode: 0
   useDeterministicCompilation: 1
   enableRoslynAnalyzers: 1
-  selectedPlatform: 0
+  selectedPlatform: 2
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
   gcIncremental: 0
