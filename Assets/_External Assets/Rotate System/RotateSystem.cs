@@ -74,7 +74,7 @@ public class RotateSystem : MonoBehaviour
                 break;
 
             case Axis.Y:
-                mRotateTargetTransform.transform.Rotate(Vector3.up * (mouseDelta.x + mouseDelta.y), mIsLocalRotation ? Space.Self : Space.World);
+                mRotateTargetTransform.transform.Rotate(Vector3.down * (mouseDelta.x + mouseDelta.y), mIsLocalRotation ? Space.Self : Space.World);
                 break;
 
             case Axis.Z:
