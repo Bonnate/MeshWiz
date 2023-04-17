@@ -1,4 +1,4 @@
-# Mesh Resizer 0.5v (23.04.13)
+# Mesh Resizer 0.6v (23.04.17)
 
 
 A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** of the **.obj** file.
@@ -12,6 +12,7 @@ A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** 
 3. Hot keys have been added.
 4. An icon is added in the upper left to show a brief description.
 5. The axis referencing the size and the rectangular parallelepiped are visualized.
+6. Lights are created uniformly regardless of the direction of the camera.
 
 [KOR]
 1. 오브젝트의 크기를 설정하는 기준 알고리즘이 변경되었습니다. 기존에는 Mesh의 가장 긴 축으로 설정했으나, 이것은 대각선의 길이를 참조할 수 있으므로 부적절하다고 판단하여 새로운 방식으로 변경합니다.
@@ -19,6 +20,7 @@ A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** 
 3. 단축키가 추가되었습니다.
 4. 좌측 상단에 간단한 설명을 보여줄 아이콘이 추가됩니다.
 5. 사이즈를 참조하는 축과 직육면체가 시각화되어 나타납니다.
+6. 이제부터 카메라의 방향에 상관 없이 빛의 강도가 동일합니다.
 
 ## Bug Fixed
 
