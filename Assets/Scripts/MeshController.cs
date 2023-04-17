@@ -119,7 +119,7 @@ public class MeshController : Singleton<MeshController>
         }
         else
         {
-            FileStream stream = new FileStream(FileBrowserRuntime.Instance.CurrentFileName.Replace(".obj", "") + "_modified.obj", FileMode.OpenOrCreate);
+            FileStream stream = new FileStream(FileBrowserRuntime.Instance.CurrentPath.Replace(".obj", "") + "_modified.obj", FileMode.OpenOrCreate);
             stream.Write(System.Text.Encoding.UTF8.GetBytes(str));
             stream.Close();
         }
