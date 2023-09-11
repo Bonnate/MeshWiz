@@ -63,8 +63,10 @@ public class UtilityManager : MonoBehaviour
 
         // Something Description
         sb.AppendLine($"# Modified by MeshResizer v{Application.version} powered by Bonnate");
-        sb.AppendLine($"# Modified when {System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
         sb.AppendLine("# https://github.com/Bonnate/MeshResizer");
+
+        sb.AppendLine();
+        sb.AppendLine($"# Modified when {System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
 
         // Restore mtl option
         if(MeshController.Instance.CurrentGoMtlLibStr is not null)

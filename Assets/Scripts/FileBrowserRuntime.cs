@@ -4,6 +4,7 @@ using System.IO;
 using SimpleFileBrowser;
 using System;
 using Dummiesman;
+using UnityEngine.UI;
 
 public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
 {
@@ -12,6 +13,8 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
     /// </summary>
     /// <value></value>
     public static bool IsDialogEnabled { private set; get; }
+
+    [SerializeField] private Button mExportBtn;
 
     [HideInInspector] public string CurrentPath { private set; get; }
     [HideInInspector] public string CurrentFileName { private set; get; }
@@ -42,7 +45,7 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
         newObj.transform.localScale = Vector3.one;
 
         //메시 컨트롤러에 로드한 obj를 등록
-        MeshController.Instance.Load(newObj);
+        MeshController.Instance.Load(bytes, newObj);
     }
 
     public void BTN_LoadObjFile()
@@ -67,5 +70,14 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
     public void BTN_ExportObjFile()
     {
         MeshController.Instance.Export();
+
+        StartCoroutine(CoReloadExportButton());
+
+        IEnumerator CoReloadExportButton()
+        {
+            mExportBtn.interactable = false;
+            yield return new WaitForSeconds(2.0f);
+            mExportBtn.interactable = true;
+        }        
     }
 }
