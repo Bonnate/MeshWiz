@@ -1,34 +1,22 @@
-# Mesh Resizer 0.6v (23.04.17)
+
+# Mesh Resizer 0.7v (23.09.11)
 
 
 A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** of the **.obj** file.
-![enter image description here](https://drive.google.com/uc?export=view&id=1AvBUYeZucwIweaQgKIsBp79vtq-S4DcU)
+![enter image description here](https://drive.google.com/uc?export=view&id=1mn3qOkuF11n3GWUwA92hN54C1Ha9QDr9)
 
 ## Newly Updated!
 
 [ENG]
-1. The reference algorithm for setting the size of the object has been changed. Previously, it was set to the longest axis of the mesh, but this can refer to the length of the diagonal, so we change it to a new way because we think it is inappropriate.
-2. From now on, the criteria for setting the size of the object is to create a rectangular parallelepiped area from the current appearance and resize it by referring to the length of entering the longest axis of the three sides.
-3. Hot keys have been added.
-4. An icon is added in the upper left to show a brief description.
-5. The axis referencing the size and the rectangular parallelepiped are visualized.
-6. Lights are created uniformly regardless of the direction of the camera.
+1. When you export, the suffix _modified will no longer be added, and the changed values ​​will be overwritten in the loaded file. (The loaded file is changed itself)
+2. File with the _modified suffix are no longer created, and loaded files are appended with the _original suffix to back up the original files. (time stamp added)
+3. To avoid duplication of timestamps, the button is temporarily disabled so that Export can be performed every 2 seconds.
 
 [KOR]
-1. 오브젝트의 크기를 설정하는 기준 알고리즘이 변경되었습니다. 기존에는 Mesh의 가장 긴 축으로 설정했으나, 이것은 대각선의 길이를 참조할 수 있으므로 부적절하다고 판단하여 새로운 방식으로 변경합니다.
-2. 이제부터 오브젝트의 크기를 설정하는 기준은 현재 보이는 모습에서 직육면체 영역을 생성하여 세변의 길이 중 가장 긴 축을 입력하는 길이로 참조하여 사이즈를 조절합니다.
-3. 단축키가 추가되었습니다.
-4. 좌측 상단에 간단한 설명을 보여줄 아이콘이 추가됩니다.
-5. 사이즈를 참조하는 축과 직육면체가 시각화되어 나타납니다.
-6. 이제부터 카메라의 방향에 상관 없이 빛의 강도가 동일합니다.
+1. Export를 하면 이제부터 _modified라는 수식어가 붙지 않고, 불러온 파일에 변경된 값을 덮어쓰기합니다. (불러온 파일 자체가 변경됨)
+2. _modified 수식어가 붙은 파일은 더 이상 생성되지 않으며, 불러온 파일이 _original이라는 수식어로 붙어 원본 파일을 백업합니다. (타임 스탬프가 추가됨)
+3. 타임 스탬프의 중복을 피하기 위해 Export는 2초마다 수행할 수 있도록 버튼이 일시적으로 비활성화됩니다.
 
-## Bug Fixed
-
-[ENG]
-1. When the dialog window to open the file is open, the ability to adjust the drag and object size temporarily stops.
-
-[KOR]
-1. 파일을 여는 다이얼로그 창이 열린 상태에서는 드래그 및 오브젝트 사이즈를 조절하는 기능이 일시적으로 멈춥니다.
 
 ## Program Features
 
@@ -56,7 +44,7 @@ Download Here: [\[Google Drive\]](https://drive.google.com/drive/folders/1255fla
 
 Simple Tooltip in program!
 
-![Simple Tooltip in program!](https://drive.google.com/uc?export=view&id=1iY3dwi4EG0wm4tyUhremVVYJob810wTo)
+![Simple Tooltip in program!](https://drive.google.com/uc?export=view&id=1fioz1-1JymbZthaRD0hIEIIHaWq2ABv_)
 
 </br></br>
 
@@ -73,7 +61,7 @@ Simple Tooltip in program!
 ㅤ
 ㅤ
 
->  **Note:** Exporting creates a new file with the **suffix _resized** attached to the file at the location of the imported file **without the need to set a new path.**
+>  **Note:** Exporting creates a new file with the **suffix _original** attached to the file at the location of the imported file **without the need to set a new path.** and the original loaded file will be modified and saved.
 
 >  **Note:** The **size of the grid means one meter in a unity meter** (for example, if a person is two meters, it takes up two compartments)
 
