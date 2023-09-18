@@ -69,17 +69,15 @@ public class UtilityManager : MonoBehaviour
         sb.AppendLine($"# Modified when {System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
 
         // Restore mtl option
-        if(MeshController.Instance.CurrentGoMtlLibStr is not null)
-        {
-            sb.AppendLine();
-            sb.AppendLine("# Path to the material library file used by the model");
-            sb.AppendLine(MeshController.Instance.CurrentGoMtlLibStr);
-        }
+        sb.AppendLine();
+        sb.AppendLine("# Path to the material library file used by the model");
+        sb.AppendLine(MeshController.Instance.CurrentGoMtlLibStr);
 
         // Object group name
         sb.AppendLine();
         sb.AppendLine("# Object group name");
-        sb.AppendLine($"g {meshFilter.gameObject.name}");
+        sb.AppendLine(MeshController.Instance.CurrentGoGroupName);
+        sb.AppendLine(MeshController.Instance.CurrentGoUseMtlValue);
         sb.AppendLine();
 
         // Transform matrix with rotation and scale

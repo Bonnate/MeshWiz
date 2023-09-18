@@ -4,6 +4,8 @@ using System.IO;
 using SimpleFileBrowser;
 using System;
 using Dummiesman;
+using System.Text;
+using System.Linq;
 using UnityEngine.UI;
 
 public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
@@ -12,7 +14,7 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
     /// 현재 다이얼로그 창이 열려있는가?
     /// </summary>
     /// <value></value>
-    public static bool IsDialogEnabled { private set; get; }
+    public static bool IsDialogEnabled { set; get; } = false;
 
     [SerializeField] private Button mExportBtn;
 
@@ -24,16 +26,26 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
 
     IEnumerator ShowLoadDialogCoroutine()
     {
-        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.FilesAndFolders, true, null, null, "Load Files and Folders", "Load");
+        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.FilesAndFolders, false, null, null, "Load Files and Folders", "Load");
 
         IsDialogEnabled = false;
 
         if (FileBrowser.Success)
         {
-            byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(FileBrowser.Result[0]);
-            CurrentPath = FileBrowser.Result[0];
+            string filePath = FileBrowser.Result[0];
+            byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(filePath);
+            CurrentPath = filePath;
 
-            LoadObjFileViaMemoryStream(new MemoryStream(bytes), Path.GetFileName(CurrentPath));
+            string fileExtension = Path.GetExtension(filePath).ToLower();
+
+            if (fileExtension == ".obj")
+            {
+                LoadObjFileViaMemoryStream(new MemoryStream(bytes), Path.GetFileName(CurrentPath));
+            }
+            else
+            {
+                DialogBoxGenerator.Instance.CreateSimpleDialogBox("Warning", "Selected file is not .obj format!", "OK");
+            }
         }
     }
 
@@ -46,6 +58,9 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
 
         //메시 컨트롤러에 로드한 obj를 등록
         MeshController.Instance.Load(bytes, newObj);
+
+        // 머티리얼 리프레쉬
+        MeshController.Instance.RefreshMaterial();
     }
 
     public void BTN_LoadObjFile()
@@ -78,6 +93,6 @@ public class FileBrowserRuntime : Singleton<FileBrowserRuntime>
             mExportBtn.interactable = false;
             yield return new WaitForSeconds(2.0f);
             mExportBtn.interactable = true;
-        }        
+        }
     }
 }

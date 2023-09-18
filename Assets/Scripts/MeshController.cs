@@ -15,7 +15,10 @@ public class MeshController : Singleton<MeshController>
     [HideInInspector] public GameObject CurrentGo = null;
     [HideInInspector] public Bounds CurrentGoBounds;
     [HideInInspector] public float CurrentGoMaxLength;
+
     [HideInInspector] public string? CurrentGoMtlLibStr = null; // 현재 오브젝트의 mtllib 값
+    [HideInInspector] public string? CurrentGoUseMtlValue = null; // 현재 오브젝트의 usemtl 값
+    [HideInInspector] public string? CurrentGoGroupName = null; // 현재 오브젝트의 usemtl 값
 
     private MemoryStream mOriginalFileStream;
 
@@ -64,6 +67,24 @@ public class MeshController : Singleton<MeshController>
         float convertedValue = (normalizedValue * outputValueRange) + minOutput;
 
         CameraAxisViewer.Instance.SetCurrentFOV(convertedValue);
+    }
+
+    public void RefreshMaterial()
+    {
+        if(CurrentGo == null)
+            return;
+
+        Material mat = CurrentGo.GetComponent<MeshRenderer>().material;
+
+        // if(ImageLoadController._TEXTURE_IMAGE != null)
+            mat.SetTexture("_BaseMap", ImageLoadController._TEXTURE_IMAGE);
+
+        // if(ImageLoadController._NORMAL_IMAGE != null)
+            mat.SetTexture("_BumpMap", ImageLoadController._NORMAL_IMAGE);
+            
+        // if(ImageLoadController._TEXTURE_IMAGE != null)
+            mat.SetTexture("_OcclusionMap", ImageLoadController._AO_IMAGE);
+
     }
 
     #region Load / Export

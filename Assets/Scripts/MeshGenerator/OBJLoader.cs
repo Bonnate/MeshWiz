@@ -115,6 +115,7 @@ namespace Dummiesman
 					buffer.ReadUntilNewLine();
 					string materialName = buffer.GetString();
                     currentMaterial = materialName;
+                    MeshController.Instance.CurrentGoUseMtlValue = $"usemtl {materialName}";                    
 
                     if(SplitMode == SplitMode.Material)
                     {
@@ -122,6 +123,16 @@ namespace Dummiesman
                     }
                     continue;
                 }
+
+                //check group
+				if (buffer.Is("g")) {
+					buffer.SkipWhitespaces();
+					buffer.ReadUntilNewLine();
+					string groupName = buffer.GetString();
+                    MeshController.Instance.CurrentGoGroupName = $"g {groupName}";                    
+
+                    continue;
+                }                
 
 				if (buffer.Is("mtllib")) {
                     buffer.ReadUntilNewLine();
