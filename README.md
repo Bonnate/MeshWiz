@@ -1,22 +1,23 @@
 
-# Mesh Resizer 0.7v (23.09.11)
+# Mesh Resizer 0.9v (23.09.18)
 
 
 A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** of the **.obj** file.
-![enter image description here](https://drive.google.com/uc?export=view&id=1mn3qOkuF11n3GWUwA92hN54C1Ha9QDr9)
+![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fn1NLd%2FbtsueikpfgY%2FTeWF8LWpfZsoIeEfBiLAMK%2Fimg.png)
 
 ## Newly Updated!
 
+![](https://blog.kakaocdn.net/dn/baTu1b/btsuh6KiTBj/qMdTfDwvomkmVxN0o7UNC0/img.png)
+
 [ENG]
-1. When you export, the suffix _modified will no longer be added, and the changed values ​​will be overwritten in the loaded file. (The loaded file is changed itself)
-2. File with the _modified suffix are no longer created, and loaded files are appended with the _original suffix to back up the original files. (time stamp added)
-3. To avoid duplication of timestamps, the button is temporarily disabled so that Export can be performed every 2 seconds.
+1. Modified to take screenshots. Except for objects, UI or background is removed and processed transparently.
+2. Modified to keep 'usemtl' item in metadata.
+3. From now on, you can recall Albedo, Normal, and Occlusion.
 
 [KOR]
-1. Export를 하면 이제부터 _modified라는 수식어가 붙지 않고, 불러온 파일에 변경된 값을 덮어쓰기합니다. (불러온 파일 자체가 변경됨)
-2. _modified 수식어가 붙은 파일은 더 이상 생성되지 않으며, 불러온 파일이 _original이라는 수식어로 붙어 원본 파일을 백업합니다. (타임 스탬프가 추가됨)
-3. 타임 스탬프의 중복을 피하기 위해 Export는 2초마다 수행할 수 있도록 버튼이 일시적으로 비활성화됩니다.
-
+1. 스크린샷을 찍을 수 있게 수정되었습니다. 오브젝트를 제외한 UI나 배경은 제거되어 투명하게 처리됩니다.
+2. 메타데이터 중 'usemtl' 항목을 유지하게 수정되었습니다.
+3. 이제부터 Albedo, Normal, Occlusion을 불러올 수 있습니다.
 
 ## Program Features
 
@@ -44,7 +45,7 @@ Download Here: [\[Google Drive\]](https://drive.google.com/drive/folders/1255fla
 
 Simple Tooltip in program!
 
-![Simple Tooltip in program!](https://drive.google.com/uc?export=view&id=1fioz1-1JymbZthaRD0hIEIIHaWq2ABv_)
+![Simple Tooltip in program!](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F0kWn5%2FbtsuGBbl8gz%2FzIIz5I8bXg05wXKHdrhEk0%2Fimg.png)
 
 </br></br>
 
