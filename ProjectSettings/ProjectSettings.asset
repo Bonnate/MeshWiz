@@ -802,7 +802,8 @@ PlayerSettings:
     tvOS: UNITY_VISUAL_SCRIPTING;CT_FB;CT_PROC;CT_RTFB;CT_UI;CT_FB_DEMO
   additionalCompilerArguments: {}
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Standalone: 0
   il2cppCompilerConfiguration: {}
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
