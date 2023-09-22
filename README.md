@@ -1,89 +1,85 @@
 
-# Mesh Resizer 0.9v (23.09.18)
+# Mesh Wiz 1.0v (23.09.22)
 
-
-A program that sets the **size(scale)**, **rotation**, and **pivot(to center)** of the **.obj** file.
-![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fn1NLd%2FbtsueikpfgY%2FTeWF8LWpfZsoIeEfBiLAMK%2Fimg.png)
-
-## Newly Updated!
-
-![](https://blog.kakaocdn.net/dn/baTu1b/btsuh6KiTBj/qMdTfDwvomkmVxN0o7UNC0/img.png)
-
-[ENG]
-1. Modified to take screenshots. Except for objects, UI or background is removed and processed transparently.
-2. Modified to keep 'usemtl' item in metadata.
-3. From now on, you can recall Albedo, Normal, and Occlusion.
-
-[KOR]
-1. 스크린샷을 찍을 수 있게 수정되었습니다. 오브젝트를 제외한 UI나 배경은 제거되어 투명하게 처리됩니다.
-2. 메타데이터 중 'usemtl' 항목을 유지하게 수정되었습니다.
-3. 이제부터 Albedo, Normal, Occlusion을 불러올 수 있습니다.
+![Main Image](https://blog.kakaocdn.net/dn/bKKSdF/btsvb3NiUxk/bxiklIUqcfVyUkKg91IcLk/img.png)
 
 ## Program Features
 
-The .obj file itself modifies the vertex value of the mesh to set the size, rotation value, and overall pivot position.
-UV mapping and image mapping will remain the same, and the output file will be applicable to **most programs**  *(maybe)*.
+MeshWiz automatically rearranges Pivot to the Center when files are loaded, offering a range of object editing capabilities:
 
-ㅤ
+1. **Pivot Realignment**: Upon loading a file, the Pivot is automatically repositioned to the Center, irrespective of the object file's original pivot. You can manipulate it using a rotating gizmo, and the object itself can be modified.
+   
+2. **Texture Application**: Apply Albedo (Texture), Normal, and AO images to view them on the object.
+   
+3. **Convenient Sizing**: Easily reset the length of object files using real-world measurements.
+   
+4. **Quality Modification**: Adjust the quality of object files using the Quality Slider.
+   
+5. **Optimization**: Reduce vertices to optimize object capacity.
+   
+6. **Capture and GIFs**: Capture screenshots with transparent backgrounds and create Loop GIFs for objects in 360 directions.
 
-## How to download
-Supports Windows and MacOS. Download from the Google Drive link below.
-</br></br>
-Download Here: [\[Google Drive\]](https://drive.google.com/drive/folders/1255flaD3pOOSMzXRwbupYDtUh8jRuuCM?usp=sharing)
+## Newly Updated!
 
+Updated to version 1.0 after several modifications!
 
+![MeshWiz Update](https://blog.kakaocdn.net/dn/bL9lUV/btsvkRrrEop/mxiqLKIRBrKsttIJv8Ozs0/img.gif)
 
-ㅤ
+- **GIF Creation**: Capture GIFs for object files with transparent backgrounds.
+- **Fast ScreenShot**: ScreenShot processing in the subthread ensures fast and smooth captures.
+
+## How to Download
+
+Supports both Windows and MacOS. Download from the Google Drive link below.
+
+Download Here: [Google Drive](https://drive.google.com/drive/folders/1255flaD3pOOSMzXRwbupYDtUh8jRuuCM?usp=sharing)
 
 ## How To Use?
+### [Installation]
 
-> Watch the example video below!!
+1. Download the program from the Google Drive link above.
+2. After extracting the files, run the program.
 
-[![Video Label](https://img.youtube.com/vi/dsj9x4qgeqQ/0.jpg)](https://youtu.be/dsj9x4qgeqQ)
+### [Object Rotation]
 
-</br></br>
+1. Click and drag the gizmo with the mouse to rotate the object.
+2. Use the Axis settings in the bottom-left corner to choose between Global and Local Axis rotation.
+3. Press the "Export File" button in the top-left corner to apply the current settings to the loaded file.
 
-Simple Tooltip in program!
+### [Object Scaling]
 
-![Simple Tooltip in program!](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F0kWn5%2FbtsuGBbl8gz%2FzIIz5I8bXg05wXKHdrhEk0%2Fimg.png)
+1. Enter the desired size in centimeters (cm) into the "Set Object Size" input field at the bottom.
+2. Click the "Set" button to adjust the object's size.
+3. Determine the object's size based on the longest axis visible in the current view, and enter it in centimeters (cm). The longest axis is indicated by a pink line.
+4. Press the "Export File" button in the top-left corner to apply the current settings to the loaded file.
 
-</br></br>
+### [Object Quality Adjustment]
 
-1. Run the program.  
-2. Load the obj file you want to change from the top left button '**Open**'.
->  **Note:** If the size of the obj file (the size of the mesh) is too large or too small, a warning window appears. You can adjust it to a specific size in the input field.
+1. Adjust the Mesh Quality slider at the bottom to modify the object's quality.
+2. Press the "Export File" button in the top-left corner to apply the current settings to the loaded file.
 
->  **Note:** Scene can be zoomed through the mouse wheel.
+### [Screenshot and GIF]
 
-ㅤ
+1. Enter the desired width and height in the "Width" and "Height" input fields at the top-right.
+2. After clicking the button, a new folder will be created in the loaded file's directory, containing files with "Thumb (Capture)" or "Rotate (GIF)" appended to their names.
 
-3. If necessary, you can adjust the size by specifying the size in cm in the input field.
-4. Rotate the object using the 3-axis gizmo. You can rotate to local and world reference in the toggle at the bottom left.
-ㅤ
-ㅤ
+## Application Example
 
->  **Note:** Exporting creates a new file with the **suffix _original** attached to the file at the location of the imported file **without the need to set a new path.** and the original loaded file will be modified and saved.
+> In Unity, the large chair is set to appear at 1 meter with the default scale of Vector.one (1,1,1).
 
->  **Note:** The **size of the grid means one meter in a unity meter** (for example, if a person is two meters, it takes up two compartments)
-
-ㅤ
-
-## Application example
-> The large chair is set to appear 1 meter with the default scale of Vector.one (1,1,1) in Unity.
-![Application example](https://drive.google.com/uc?id=1uR2ZJV-Lq8RLUFLhmIawyBd21O0TGRza)
+![Chair Example](https://drive.google.com/uc?id=1uR2ZJV-Lq8RLUFLhmIawyBd21O0TGRza)
 
 > These changes are also fully implemented in 3ds Max.
-![These changes are also fully implemented in 3ds Max](https://drive.google.com/uc?id=1vz0LRepQJGgpjDebLMGo34-4gGf9dmtE)
+
+![3ds Max Example](https://drive.google.com/uc?id=1vz0LRepQJGgpjDebLMGo34-4gGf9dmtE)
 
 > The texture also works perfectly.
-![The texture also works perfectly](https://drive.google.com/uc?export=view&id=1pA4GnLoJ5HTSD_CHjUC0PApmGkhaTQVZ)
 
-ㅤ
+![Texture Example](https://drive.google.com/uc?export=view&id=1pA4GnLoJ5HTSD_CHjUC0PApmGkhaTQVZ)
 
 ## Reference
 
-Use a file browser within Unity Project.
-https://github.com/yasirkula/UnitySimpleFileBrowser
-
-Enables import and export of obj files.
-https://github.com/Dummiesman
+- https://github.com/yasirkula/UnitySimpleFileBrowser
+- https://github.com/Dummiesman
+- https://github.com/simonwittber/uGIF
+- https://github.com/Whinarn/UnityMeshSimplifier
