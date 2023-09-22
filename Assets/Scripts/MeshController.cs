@@ -123,6 +123,9 @@ public class MeshController : Singleton<MeshController>
 
         // 카메라 뷰 설정
         SetCameraFOV();
+
+        // Original Mesh 등록
+        MeshSimplifier.Instance.Init(CurrentGo.GetComponent<MeshFilter>());
     }
 
     /// <summary>

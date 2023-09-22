@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.github-glitchenzo.nugetforunity": {
-      "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "e77fc341a4e186c7ab2e463b467cc2d7eb1e5fb1"
-    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
@@ -164,6 +157,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.whinarn.unitymeshsimplifier": {
+      "version": "https://github.com/Whinarn/UnityMeshSimplifier.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "d741912bfeaad8da4fe0f258f4f3eefe1fe7b3f3"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

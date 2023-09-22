@@ -7,7 +7,6 @@ namespace uGIF
 {
 	public class GIFEncoder
 	{
-
 		public bool useGlobalColorTable = false;
 		public Color32? transparent = null;
 		public int repeat = -1;
@@ -119,31 +118,6 @@ namespace uGIF
 				prevIndexedPixels = indexedPixels.Clone () as byte[];
 		}
 	
-		int FindClosest (Color32 c)
-		{
-			if (colorTab == null)
-				return -1;
-			int r = c.r;
-			int g = c.g;
-			int b = c.b;
-			int minpos = 0;
-			int dmin = 256 * 256 * 256;
-			int len = colorTab.Length;
-			for (int i = 0; i < len;) {
-				int dr = r - (colorTab [i++] & 0xff);
-				int dg = g - (colorTab [i++] & 0xff);
-				int db = b - (colorTab [i] & 0xff);
-				int d = dr * dr + dg * dg + db * db;
-				int index = i / 3;
-				if (usedEntry [index] && (d < dmin)) {
-					dmin = d;
-					minpos = index;
-				}
-				i++;
-			}
-			return minpos;
-		}
-
 		void WriteGraphicCtrlExt ()
 		{
 			ms.WriteByte (0x21); // extension introducer

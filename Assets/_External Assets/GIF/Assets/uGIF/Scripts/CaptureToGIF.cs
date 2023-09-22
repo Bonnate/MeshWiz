@@ -7,81 +7,62 @@ using System.Threading;
 
 namespace uGIF
 {
-    public class CaptureToGIF : MonoBehaviour
+    // 420 300
+    public class CaptureToGIF : Singleton<CaptureToGIF>
     {
-		[SerializeField] private List<Texture2D> textures;
+        private List<Image> frames = new List<Image>();
+        private float frameRate = 5;
+        private byte[] bytes = null;
 
-        public float frameRate = 15;
-        public bool capture;
-        public int downscale = 1;
-        public float captureTime = 10;
-        public bool useBilinearScaling = true;
-
-        [System.NonSerialized]
-        public byte[] bytes = null;
-
-		private void Start() {
-			Encode();
-		}
-
-        public void Encode()
+        public void ExportAsGIF(List<Texture2D> textures, string exportFolderPath)
         {
-            bytes = null;
-			_Encode();
-            StartCoroutine(WaitForBytes());
+            frames.Clear();
+
+            foreach (Texture2D texture in textures)
+                frames.Add(new Image(texture));
+
+            System.Threading.Tasks.Task.Run(() =>
+             Encode(exportFolderPath, $"rotate_{System.DateTime.Now:yyyyMMddHHmmssms}")
+            );
         }
 
-        IEnumerator WaitForBytes()
+        public void Encode(string exportFolderPath, string fileName, int downscale = 1)
         {
-            while (bytes == null) yield return null;
-            System.IO.File.WriteAllBytes("/Users/METABANK/Desktop/test.gif", bytes);
-            bytes = null;
-        }
-
-        public void _Encode()
-        {
-			frames.Clear();
-
-			foreach(Texture2D texture in textures)
-				frames.Add(new Image(texture));
-
-            capture = false;
-
             var ge = new GIFEncoder();
             ge.useGlobalColorTable = true;
             ge.repeat = 0;
             ge.FPS = frameRate;
-            ge.transparent = new Color32(255, 0, 255, 255);
-            ge.dispose = 1;
+            ge.transparent = new Color32(0, 0, 0, 0);
+            ge.dispose = -1;
 
             var stream = new MemoryStream();
             ge.Start(stream);
             foreach (var f in frames)
             {
-                if (downscale != 1)
-                {
-                    if (useBilinearScaling)
-                    {
-                        f.ResizeBilinear(f.width / downscale, f.height / downscale);
-                    }
-                    else
-                    {
-                        f.Resize(downscale);
-                    }
-                }
+                f.Resize(downscale);
+
+                // if (downscale != 1)
+                // {
+                //     if (useBilinearScaling)
+                //     {
+                //         f.ResizeBilinear(1920, 1080);
+                //     }
+                //     else
+                //     {
+                //         Debug.Log("B");
+                //         f.Resize(downscale);
+                //     }
+                // }
+
                 f.Flip();
                 ge.AddFrame(f);
             }
             ge.Finish();
             bytes = stream.GetBuffer();
             stream.Close();
+
+            System.IO.File.WriteAllBytes($"{exportFolderPath}/{fileName}.gif", bytes);
+            bytes = null;
         }
-
-        List<Image> frames = new List<Image>();
-        Texture2D colorBuffer;
-        float period;
-        float T = 0;
-        float startTime = 0;
-
     }
 }
