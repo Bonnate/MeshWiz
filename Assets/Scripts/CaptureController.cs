@@ -13,6 +13,7 @@ public class CaptureController : MonoBehaviour
 {
     [SerializeField] private TMP_InputField mWidthInputField;
     [SerializeField] private TMP_InputField mHeightInputField;
+    [SerializeField] private TMP_InputField mCaptureCountField;
 
     public static int _GIF_INDEX_CNT;
     private string gifExportFolderName = "";
@@ -65,10 +66,12 @@ public class CaptureController : MonoBehaviour
         string gifFolderName = $"GIF_{System.DateTime.Now:yyyyMMddHHmmss}";
         _GIF_INDEX_CNT = 0;
 
-        for (int i = 0; i < 30; ++i)
+        int captureCount = int.Parse(mCaptureCountField.text);
+
+        for (int i = 0; i < captureCount; ++i)
         {
             // yield return new WaitForSeconds(1.0f);
-            mAxisParent.transform.eulerAngles = Vector3.up * i * 12.0f;
+            mAxisParent.transform.eulerAngles = Vector3.up * i * 360 / captureCount;
             yield return StartCoroutine(CoTakeScreenshot(gifFolderName));
         }
 
